@@ -63,7 +63,7 @@ impl<'a> Stream<'a> {
 
                     while let Some(c) = self.chars().next() {
                         if c != ',' {
-                            idents.push(self.parse_ident()?.to_string());
+                            idents.push(self.consume_ascii_ident().to_string());
                             self.skip_spaces();
                         } else {
                             break;
