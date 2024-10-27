@@ -148,7 +148,7 @@ impl<'a> FontShorthand<'a> {
             match ident {
                 // TODO: Reuse actual parsers to prevent duplication.
                 // We ignore normal because it's ambiguous to which it belongs and all
-                // other attributes need to be resetted anyway.
+                // other attributes need to be reset anyway.
                 "normal" => {}
                 "small-caps" => font_variant = Some(ident),
                 "italic" | "oblique" => font_style = Some(ident),
@@ -159,8 +159,8 @@ impl<'a> FontShorthand<'a> {
                     font_stretch = Some(ident)
                 }
                 _ => {
-                    // Not one of the 4 properties, so we backtrack and then start pasing font
-                    // size and family.
+                    // Not one of the 4 properties, so we backtrack and then start
+                    // passing font size and family.
                     stream = Stream::from(text);
                     stream.advance(prev_pos);
                     break;
