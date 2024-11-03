@@ -40,7 +40,9 @@ impl<'a> From<Option<&'a str>> for VariableFallback<'a> {
 /// [`var()`]: https://drafts.csswg.org/css-variables/#funcdef-var
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct VariableFunction<'a> {
+    /// Variable to resolve to get the value.
     pub variable: &'a str,
+    /// Fallback value in case variable isn't defined.
     pub fallback: VariableFallback<'a>
 }
 
