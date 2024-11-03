@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use crate::{variable::{VariableFallback, VariableFunction}, Color, Error, Stream};
+use crate::{Color, Error, Stream};
 
 /// Representation of the fallback part of the [`<paint>`] type.
 ///
@@ -23,7 +23,7 @@ pub enum PaintFallback<'a> {
     Color(Color),
     /// A `var()` function fallback.
     /// 
-    /// See [`VariableFunction`] for details.
+    /// See [`VariableFunction`][crate::variable::VariableFunction] for details.
     Variable(&'a str, Option<Box<PaintFallback<'a>>>),
 }
 
@@ -99,7 +99,7 @@ pub enum Paint<'a> {
     ContextStroke,
     /// A `var()` function.
     /// 
-    /// See [`VariableFunction`] for details.
+    /// See [`VariableFunction`][crate::variable::VariableFunction] for details.
     Variable(&'a str, Option<PaintFallback<'a>>),
 }
 
