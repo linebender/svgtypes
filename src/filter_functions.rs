@@ -29,7 +29,7 @@ pub enum FilterValue<'a> {
     Contrast(f64),
     /// Normalized value. Cannot be negative.
     Grayscale(f64),
-    HueRotate(Angle),
+    HueRotate(Angle<'a>),
     /// Normalized value. Cannot be negative.
     Invert(f64),
     /// Normalized value. Cannot be negative.
@@ -314,7 +314,7 @@ fn parse_filter_positive_length(s: &mut Stream) -> Result<Length, FilterValueLis
 }
 
 // Just like a normal angle, but units are mandatory.
-fn parse_filter_angle(s: &mut Stream) -> Result<Angle, FilterValueListParserError> {
+fn parse_filter_angle<'a>(s: &mut Stream) -> Result<Angle<'a>, FilterValueListParserError> {
     s.skip_spaces();
 
     let start = s.pos();
