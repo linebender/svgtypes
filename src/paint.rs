@@ -1,13 +1,13 @@
 use std::str::FromStr;
 
-use crate::{variable::VariableFallback, Color, Error, Stream};
+use crate::{Color, Error, Stream};
 
 /// Representation of the fallback part of the [`<paint>`] type.
 ///
 /// Used by the [`Paint`](enum.Paint.html) type.
 ///
 /// [`<paint>`]: https://www.w3.org/TR/SVG2/painting.html#SpecifyingPaint
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, PartialEq, Eq, Debug)]
 pub enum PaintFallback<'a> {
     /// An empty value.
     /// 
@@ -24,7 +24,7 @@ pub enum PaintFallback<'a> {
     /// A `var()` function fallback.
     /// 
     /// See [`VariableFunction`][crate::variable::VariableFunction] for details.
-    Variable(&'a str, VariableFallback<'a>),
+    Variable(&'a str, Option<Box<PaintFallback<'a>>>),
 }
 
 impl<'a> PaintFallback<'a> {
@@ -45,7 +45,11 @@ impl<'a> PaintFallback<'a> {
         let mut s = Stream::from(text);
         if s.starts_with(b"var(") {
             let (variable, fallback) = s.parse_var_func()?;
-            let fallback = VariableFallback::from(fallback);
+            let fallback = match fallback {
+                None => None,
+                Some("") => Some(Box::new(PaintFallback::Empty)),
+                Some(other) => Some(Box::new(PaintFallback::from_str(other)?))
+            };
             return Ok(PaintFallback::Variable(variable, fallback));
         }
 
@@ -73,7 +77,7 @@ impl<'a> PaintFallback<'a> {
 /// let paint = Paint::from_str("inherit").unwrap();
 /// assert_eq!(paint, Paint::Inherit);
 /// ```
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, PartialEq, Eq, Debug)]
 pub enum Paint<'a> {
     /// The `none` value.
     None,

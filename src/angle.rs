@@ -1,7 +1,4 @@
-use crate::{
-    variable::{VariableFallback, VariableFunction},
-    Error, Stream,
-};
+use crate::{Error, Stream};
 
 /// List of all SVG angle units.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -18,46 +15,35 @@ pub enum AngleUnit {
 /// [`<angle>`]: https://www.w3.org/TR/css-values-3/#angles
 #[derive(Clone, Copy, PartialEq, Debug)]
 #[allow(missing_docs)]
-pub enum Angle<'a> {
-    Discrete { number: f64, unit: AngleUnit },
-    Variable(VariableFunction<'a>),
+pub struct Angle {
+    pub number: f64,
+    pub unit: AngleUnit,
 }
 
-impl<'a> Angle<'a> {
+impl Angle {
     /// Constructs a new angle.
     #[inline]
-    pub fn new(number: f64, unit: AngleUnit) -> Self {
-        Self::Discrete { number, unit }
+    pub fn new(number: f64, unit: AngleUnit) -> Angle {
+        Angle { number, unit }
     }
 
-    /// Constructs a new angle variable.
+    /// Converts angle to degrees.
     #[inline]
-    pub fn new_var(variable: VariableFunction<'a>) -> Self {
-        Self::Variable(variable)
-    }
-
-    /// Converts discrete angle values to degrees.
-    ///
-    /// If variable value is used, it will be returned instead as `Err`.
-    #[inline]
-    pub fn to_degrees(&self) -> Result<f64, VariableFunction<'a>> {
-        match self {
-            Self::Discrete { number, unit } => Ok(match unit {
-                AngleUnit::Degrees => *number,
-                AngleUnit::Gradians => number * 180.0 / 200.0,
-                AngleUnit::Radians => number.to_degrees(),
-                AngleUnit::Turns => number * 360.0,
-            }),
-            Self::Variable(variable) => Err(*variable),
+    pub fn to_degrees(&self) -> f64 {
+        match self.unit {
+            AngleUnit::Degrees => self.number,
+            AngleUnit::Gradians => self.number * 180.0 / 200.0,
+            AngleUnit::Radians => self.number.to_degrees(),
+            AngleUnit::Turns => self.number * 360.0,
         }
     }
+}
 
-    /// Parsers an `Angle` from a string.
-    ///
-    /// We can't use the `FromStr` trait because it requires
-    /// an owned value as a return type.
+impl std::str::FromStr for Angle {
+    type Err = Error;
+
     #[inline]
-    fn from_str(text: &'a str) -> Result<Self, Error> {
+    fn from_str(text: &str) -> Result<Self, Error> {
         let mut s = Stream::from(text);
         let l = s.parse_angle()?;
 
@@ -65,7 +51,7 @@ impl<'a> Angle<'a> {
             return Err(Error::UnexpectedData(s.calc_char_pos()));
         }
 
-        Ok(l)
+        Ok(Angle::new(l.number, l.unit))
     }
 }
 
@@ -77,16 +63,8 @@ impl<'a> Stream<'a> {
     /// # Notes
     ///
     /// - Suffix must be lowercase, otherwise it will be an error.
-    pub fn parse_angle(&mut self) -> Result<Angle<'a>, Error> {
+    pub fn parse_angle(&mut self) -> Result<Angle, Error> {
         self.skip_spaces();
-
-        if self.starts_with(b"var(") {
-            let (variable, fallback) = self.parse_var_func()?;
-            return Ok(Angle::Variable(VariableFunction {
-                variable,
-                fallback: VariableFallback::from(fallback),
-            }));
-        }
 
         let n = self.parse_number()?;
 
