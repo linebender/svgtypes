@@ -3,7 +3,8 @@ name = "codegen"
 version = "0.1.0"
 authors = ["RazrFalcon <razrfalcon@gmail.com>"]
 license = "Apache-2.0 OR MIT"
-edition = "2018"
+edition = "2021"
+publish = false
 
 [workspace]
 
@@ -14,4 +15,4 @@ path = "main.rs"
 [dependencies]
 phf = "0.7.22"
 phf_codegen = "0.7.22"
-itertools = "0.7"
+itertools = "0.13"
