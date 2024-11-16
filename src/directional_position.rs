@@ -1,3 +1,6 @@
+// Copyright 2023 the SVG Types Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use crate::{Error, Length, LengthUnit, Stream};
 
 /// List of all SVG directional positions.

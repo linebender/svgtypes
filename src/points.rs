@@ -1,3 +1,6 @@
+// Copyright 2021 the SVG Types Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use crate::Stream;
 
 /// A pull-based [`<list-of-points>`] parser.

@@ -1,3 +1,6 @@
+// Copyright 2018 the SVG Types Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use crate::{Error, Stream};
 
 /// Representation of the `align` value of the [`preserveAspectRatio`] attribute.

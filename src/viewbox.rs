@@ -1,3 +1,6 @@
+// Copyright 2018 the SVG Types Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use crate::Stream;
 
 /// List of possible [`ViewBox`] parsing errors.

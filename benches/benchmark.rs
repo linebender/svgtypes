@@ -1,3 +1,6 @@
+// Copyright 2021 the SVG Types Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use bencher::{benchmark_group, benchmark_main, Bencher};
 
 fn path_large(bencher: &mut Bencher) {

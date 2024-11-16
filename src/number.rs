@@ -1,3 +1,6 @@
+// Copyright 2018 the SVG Types Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use std::str::FromStr;
 
 use crate::{ByteExt, Error, Stream};

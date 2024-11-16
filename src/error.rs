@@ -1,3 +1,6 @@
+// Copyright 2018 the SVG Types Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 /// List of all errors.
 #[derive(Debug, PartialEq, Eq)]
 pub enum Error {
