@@ -205,8 +205,8 @@ impl Stream<'_> {
             } else if name == "hsl" || name == "hsla" {
                 self.consume_byte(b'(')?;
 
-                let mut hue = self.parse_list_integer()?;
-                hue = ((hue % 360) + 360) % 360;
+                let mut hue = self.parse_list_number()?;
+                hue = ((hue % 360.0) + 360.0) % 360.0;
 
                 let saturation = f64_bound(0.0, self.parse_list_number_or_percent()?, 1.0);
                 let lightness = f64_bound(0.0, self.parse_list_number_or_percent()?, 1.0);
@@ -551,6 +551,18 @@ mod tests {
     test!(
         hsl_with_alpha,
         "hsl(120, 100%, 75%, 0.5)",
+        Color::new_rgba(127, 255, 127, 127)
+    );
+
+    test!(
+        hsl_with_hue_float,
+        "hsl(120.152, 100%, 75%)",
+        Color::new_rgba(127, 255, 127, 255)
+    );
+
+    test!(
+        hsla_with_hue_float,
+        "hsla(120.152, 100%, 75%, 0.5)",
         Color::new_rgba(127, 255, 127, 127)
     );
 
