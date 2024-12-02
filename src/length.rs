@@ -80,7 +80,7 @@ impl std::str::FromStr for Length {
     }
 }
 
-impl<'a> Stream<'a> {
+impl Stream<'_> {
     /// Parses length from the stream.
     ///
     /// <https://www.w3.org/TR/SVG2/types.html#InterfaceSVGLength>
@@ -166,7 +166,7 @@ impl<'a> From<&'a str> for LengthListParser<'a> {
     }
 }
 
-impl<'a> Iterator for LengthListParser<'a> {
+impl Iterator for LengthListParser<'_> {
     type Item = Result<Length, Error>;
 
     fn next(&mut self) -> Option<Self::Item> {

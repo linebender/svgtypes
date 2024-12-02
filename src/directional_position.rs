@@ -72,7 +72,7 @@ impl std::str::FromStr for DirectionalPosition {
     }
 }
 
-impl<'a> Stream<'a> {
+impl Stream<'_> {
     /// Parses a directional position [`left`, `center`, `right`, `bottom`, `top`] from the stream.
     pub fn parse_directional_position(&mut self) -> Result<DirectionalPosition, Error> {
         self.skip_spaces();

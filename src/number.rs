@@ -24,7 +24,7 @@ impl std::str::FromStr for Number {
     }
 }
 
-impl<'a> Stream<'a> {
+impl Stream<'_> {
     /// Parses number from the stream.
     ///
     /// This method will detect a number length and then
@@ -145,7 +145,7 @@ impl<'a> From<&'a str> for NumberListParser<'a> {
     }
 }
 
-impl<'a> Iterator for NumberListParser<'a> {
+impl Iterator for NumberListParser<'_> {
     type Item = Result<f64, Error>;
 
     fn next(&mut self) -> Option<Self::Item> {

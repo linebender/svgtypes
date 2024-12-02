@@ -40,7 +40,7 @@ impl<'a> From<&'a str> for PointsParser<'a> {
     }
 }
 
-impl<'a> Iterator for PointsParser<'a> {
+impl Iterator for PointsParser<'_> {
     type Item = (f64, f64);
 
     fn next(&mut self) -> Option<Self::Item> {

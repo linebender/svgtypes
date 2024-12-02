@@ -58,7 +58,7 @@ impl std::str::FromStr for Angle {
     }
 }
 
-impl<'a> Stream<'a> {
+impl Stream<'_> {
     /// Parses angle from the stream.
     ///
     /// <https://www.w3.org/TR/SVG2/types.html#InterfaceSVGAngle>

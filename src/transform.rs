@@ -107,7 +107,7 @@ impl<'a> From<&'a str> for TransformListParser<'a> {
     }
 }
 
-impl<'a> Iterator for TransformListParser<'a> {
+impl Iterator for TransformListParser<'_> {
     type Item = Result<TransformListToken, Error>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -137,7 +137,7 @@ impl<'a> Iterator for TransformListParser<'a> {
     }
 }
 
-impl<'a> TransformListParser<'a> {
+impl TransformListParser<'_> {
     fn parse_next(&mut self) -> Result<TransformListToken, Error> {
         let s = &mut self.stream;
 

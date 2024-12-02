@@ -49,7 +49,7 @@ impl Display for FontFamily {
     }
 }
 
-impl<'a> Stream<'a> {
+impl Stream<'_> {
     pub fn parse_font_families(&mut self) -> Result<Vec<FontFamily>, Error> {
         let mut families = vec![];
 

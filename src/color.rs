@@ -111,7 +111,7 @@ impl std::str::FromStr for Color {
     }
 }
 
-impl<'a> Stream<'a> {
+impl Stream<'_> {
     /// Tries to parse a color, but doesn't advance on error.
     pub fn try_parse_color(&mut self) -> Option<Color> {
         let mut s = *self;

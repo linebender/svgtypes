@@ -121,7 +121,7 @@ impl<'a> From<&'a str> for PathParser<'a> {
     }
 }
 
-impl<'a> Iterator for PathParser<'a> {
+impl Iterator for PathParser<'_> {
     type Item = Result<PathSegment, Error>;
 
     #[inline]
@@ -661,7 +661,7 @@ impl<'a> From<&'a str> for SimplifyingPathParser<'a> {
     }
 }
 
-impl<'a> Iterator for SimplifyingPathParser<'a> {
+impl Iterator for SimplifyingPathParser<'_> {
     type Item = Result<SimplePathSegment, Error>;
 
     fn next(&mut self) -> Option<Self::Item> {
