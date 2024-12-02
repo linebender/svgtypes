@@ -363,13 +363,13 @@ mod tests {
     #[test]
     fn parse_err_4() {
         let mut ts = TransformListParser::from(" ");
-        assert_eq!(ts.next().is_none(), true);
+        assert!(ts.next().is_none());
     }
 
     #[test]
     fn parse_err_5() {
         let mut ts = TransformListParser::from("\x01");
-        assert_eq!(ts.next().unwrap().is_err(), true);
+        assert!(ts.next().unwrap().is_err());
     }
 
     test_err!(parse_err_6, "rect()", "unexpected data at position 1");

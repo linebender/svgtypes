@@ -134,6 +134,7 @@ impl<'a> FontShorthand<'a> {
     /// an owned value as a return type.
     ///
     /// [font]: https://www.w3.org/TR/css-fonts-3/#font-prop
+    #[allow(clippy::should_implement_trait)] // We aren't changing public API yet.
     pub fn from_str(text: &'a str) -> Result<Self, Error> {
         let mut stream = Stream::from(text);
         stream.skip_spaces();

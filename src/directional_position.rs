@@ -22,23 +22,19 @@ impl DirectionalPosition {
     /// Checks whether the value can be a horizontal position.
     #[inline]
     pub fn is_horizontal(&self) -> bool {
-        match self {
-            DirectionalPosition::Center
-            | DirectionalPosition::Left
-            | DirectionalPosition::Right => true,
-            _ => false,
-        }
+        matches!(
+            self,
+            DirectionalPosition::Center | DirectionalPosition::Left | DirectionalPosition::Right
+        )
     }
 
     /// Checks whether the value can be a vertical position.
     #[inline]
     pub fn is_vertical(&self) -> bool {
-        match self {
-            DirectionalPosition::Center
-            | DirectionalPosition::Top
-            | DirectionalPosition::Bottom => true,
-            _ => false,
-        }
+        matches!(
+            self,
+            DirectionalPosition::Center | DirectionalPosition::Top | DirectionalPosition::Bottom
+        )
     }
 }
 
@@ -79,21 +75,21 @@ impl Stream<'_> {
 
         if self.starts_with(b"left") {
             self.advance(4);
-            return Ok(DirectionalPosition::Left);
+            Ok(DirectionalPosition::Left)
         } else if self.starts_with(b"right") {
             self.advance(5);
-            return Ok(DirectionalPosition::Right);
+            Ok(DirectionalPosition::Right)
         } else if self.starts_with(b"top") {
             self.advance(3);
-            return Ok(DirectionalPosition::Top);
+            Ok(DirectionalPosition::Top)
         } else if self.starts_with(b"bottom") {
             self.advance(6);
-            return Ok(DirectionalPosition::Bottom);
+            Ok(DirectionalPosition::Bottom)
         } else if self.starts_with(b"center") {
             self.advance(6);
-            return Ok(DirectionalPosition::Center);
+            Ok(DirectionalPosition::Center)
         } else {
-            return Err(Error::InvalidString(
+            Err(Error::InvalidString(
                 vec![
                     self.slice_tail().to_string(),
                     "left".to_string(),
@@ -103,7 +99,7 @@ impl Stream<'_> {
                     "center".to_string(),
                 ],
                 self.calc_char_pos(),
-            ));
+            ))
         }
     }
 }
