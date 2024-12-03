@@ -273,9 +273,9 @@ fn hsl_to_rgb(hue: f32, saturation: f32, lightness: f32) -> Color {
     let green = hue_to_rgb(t1, t2, hue);
     let blue = hue_to_rgb(t1, t2, hue - 2.0);
     Color::new_rgb(
-        (red * 255.0) as u8,
-        (green * 255.0) as u8,
-        (blue * 255.0) as u8,
+        (red * 255.0).round() as u8,
+        (green * 255.0).round() as u8,
+        (blue * 255.0).round() as u8,
     )
 }
 
@@ -521,7 +521,7 @@ mod tests {
     test!(
         hsl_green,
         "hsl(120, 100%, 75%)",
-        Color::new_rgba(127, 255, 127, 255)
+        Color::new_rgba(128, 255, 128, 255)
     );
 
     test!(
@@ -545,13 +545,19 @@ mod tests {
     test!(
         hsla_green,
         "hsla(120, 100%, 75%, 0.5)",
-        Color::new_rgba(127, 255, 127, 127)
+        Color::new_rgba(128, 255, 128, 127)
     );
 
     test!(
         hsl_with_alpha,
         "hsl(120, 100%, 75%, 0.5)",
-        Color::new_rgba(127, 255, 127, 127)
+        Color::new_rgba(128, 255, 128, 127)
+    );
+
+    test!(
+        hsl_to_rgb_red_round_up,
+        "hsl(230, 57%, 54%)",
+        Color::new_rgba(71, 93, 205, 255)
     );
 
     test!(
