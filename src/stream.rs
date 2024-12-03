@@ -1,8 +1,6 @@
 // Copyright 2018 the SVG Types Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-// use std::str::FromStr;
-
 use crate::Error;
 
 /// Extension methods for XML-subset only operations.
@@ -409,52 +407,6 @@ impl<'a> Stream<'a> {
         &self.text[self.pos..]
     }
 
-    /// Parses integer number from the stream.
-    ///
-    /// Same as [`parse_number()`], but only for integer. Does not refer to any SVG type.
-    ///
-    /// [`parse_number()`]: #method.parse_number
-    // pub fn parse_integer(&mut self) -> Result<i32, Error> {
-    //     self.skip_spaces();
-
-    //     if self.at_end() {
-    //         return Err(Error::InvalidNumber(self.calc_char_pos()));
-    //     }
-
-    //     let start = self.pos();
-
-    //     // Consume sign.
-    //     if self.curr_byte()?.is_sign() {
-    //         self.advance(1);
-    //     }
-
-    //     // The current char must be a digit.
-    //     if !self.curr_byte()?.is_digit() {
-    //         return Err(Error::InvalidNumber(self.calc_char_pos_at(start)));
-    //     }
-
-    //     self.skip_digits();
-
-    //     // Use the default i32 parser now.
-    //     let s = self.slice_back(start);
-    //     match i32::from_str(s) {
-    //         Ok(n) => Ok(n),
-    //         Err(_) => Err(Error::InvalidNumber(self.calc_char_pos_at(start))),
-    //     }
-    // }
-
-    /// Parses integer from a list of numbers.
-    // pub fn parse_list_integer(&mut self) -> Result<i32, Error> {
-    //     if self.at_end() {
-    //         return Err(Error::UnexpectedEndOfStream);
-    //     }
-
-    //     let n = self.parse_integer()?;
-    //     self.skip_spaces();
-    //     self.parse_list_separator();
-    //     Ok(n)
-    // }
-
     /// Parses number or percent from the stream.
     ///
     /// Percent value will be normalized.
@@ -494,23 +446,3 @@ impl<'a> Stream<'a> {
         }
     }
 }
-
-// #[rustfmt::skip]
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-
-//     #[test]
-//     fn parse_integer_1() {
-//         let mut s = Stream::from("10");
-//         assert_eq!(s.parse_integer().unwrap(), 10);
-//     }
-
-//     #[test]
-//     fn parse_err_integer_1() {
-//         // error because of overflow
-//         let mut s = Stream::from("10000000000000");
-//         assert_eq!(s.parse_integer().unwrap_err().to_string(),
-//                    "invalid number at position 1");
-//     }
-// }
