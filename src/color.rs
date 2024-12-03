@@ -563,13 +563,13 @@ mod tests {
     test!(
         hsl_with_hue_float,
         "hsl(120.152, 100%, 75%)",
-        Color::new_rgba(127, 255, 127, 255)
+        Color::new_rgba(128, 255, 128, 255)
     );
 
     test!(
         hsla_with_hue_float,
         "hsla(120.152, 100%, 75%, 0.5)",
-        Color::new_rgba(127, 255, 127, 127)
+        Color::new_rgba(128, 255, 128, 127)
     );
 
     macro_rules! test_err {
