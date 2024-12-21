@@ -197,7 +197,8 @@ impl Stream<'_> {
 
                 self.skip_spaces();
                 if !self.starts_with(b")") {
-                    color.alpha = (f64_bound(0.0, self.parse_list_number()?, 1.0) * 255.0) as u8;
+                    color.alpha =
+                        (f64_bound(0.0, self.parse_list_number()?, 1.0) * 255.0).round() as u8;
                 }
 
                 self.skip_spaces();
@@ -215,7 +216,8 @@ impl Stream<'_> {
 
                 self.skip_spaces();
                 if !self.starts_with(b")") {
-                    color.alpha = (f64_bound(0.0, self.parse_list_number()?, 1.0) * 255.0) as u8;
+                    color.alpha =
+                        (f64_bound(0.0, self.parse_list_number()?, 1.0) * 255.0).round() as u8;
                 }
 
                 self.skip_spaces();
@@ -437,7 +439,7 @@ mod tests {
     test!(
         rgb_numeric_all_float_with_alpha,
         "rgb(0.0, 129.82, 231.092, 0.5)",
-        Color::new_rgba(0, 130, 231, 127)
+        Color::new_rgba(0, 130, 231, 128)
     );
 
     test!(
@@ -485,7 +487,7 @@ mod tests {
     test!(
         rgba_half,
         "rgba(10, 20, 30, 0.5)",
-        Color::new_rgba(10, 20, 30, 127)
+        Color::new_rgba(10, 20, 30, 128)
     );
 
     test!(
@@ -515,7 +517,7 @@ mod tests {
     test!(
         rgb_with_alpha,
         "rgb(10, 20, 30, 0.5)",
-        Color::new_rgba(10, 20, 30, 127)
+        Color::new_rgba(10, 20, 30, 128)
     );
 
     test!(
@@ -545,13 +547,13 @@ mod tests {
     test!(
         hsla_green,
         "hsla(120, 100%, 75%, 0.5)",
-        Color::new_rgba(128, 255, 128, 127)
+        Color::new_rgba(128, 255, 128, 128)
     );
 
     test!(
         hsl_with_alpha,
         "hsl(120, 100%, 75%, 0.5)",
-        Color::new_rgba(128, 255, 128, 127)
+        Color::new_rgba(128, 255, 128, 128)
     );
 
     test!(
@@ -569,7 +571,7 @@ mod tests {
     test!(
         hsla_with_hue_float,
         "hsla(120.152, 100%, 75%, 0.5)",
-        Color::new_rgba(128, 255, 128, 127)
+        Color::new_rgba(128, 255, 128, 128)
     );
 
     macro_rules! test_err {
