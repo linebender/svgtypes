@@ -7,7 +7,7 @@ use crate::{Color, Error, Stream};
 
 /// Representation of the fallback part of the [`<paint>`] type.
 ///
-/// Used by the [`Paint`](enum.Paint.html) type.
+/// Used by the [`Paint`] type.
 ///
 /// [`<paint>`]: https://www.w3.org/TR/SVG2/painting.html#SpecifyingPaint
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
