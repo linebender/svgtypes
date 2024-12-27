@@ -73,8 +73,8 @@ pub enum TransformOriginError {
     ZIndexIsPercentage,
 }
 
-impl std::fmt::Display for TransformOriginError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for TransformOriginError {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match *self {
             TransformOriginError::MissingParameters => {
                 write!(f, "transform origin doesn't have enough parameters")
@@ -89,13 +89,13 @@ impl std::fmt::Display for TransformOriginError {
     }
 }
 
-impl std::error::Error for TransformOriginError {
+impl core::error::Error for TransformOriginError {
     fn description(&self) -> &str {
         "a transform origin parsing error"
     }
 }
 
-impl std::str::FromStr for TransformOrigin {
+impl core::str::FromStr for TransformOrigin {
     type Err = TransformOriginError;
 
     fn from_str(text: &str) -> Result<Self, TransformOriginError> {
@@ -192,7 +192,8 @@ impl std::str::FromStr for TransformOrigin {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::str::FromStr;
+    use alloc::string::ToString;
+    use core::str::FromStr;
 
     macro_rules! test {
         ($name:ident, $text:expr, $result:expr) => (

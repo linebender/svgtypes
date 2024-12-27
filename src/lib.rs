@@ -51,10 +51,13 @@
 None.
 */
 
+#![no_std]
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 #![deny(missing_debug_implementations)]
 #![deny(missing_copy_implementations)]
+
+extern crate alloc;
 
 macro_rules! matches {
     ($expression:expr, $($pattern:tt)+) => {

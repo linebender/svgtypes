@@ -13,8 +13,8 @@ pub enum ViewBoxError {
     InvalidSize,
 }
 
-impl std::fmt::Display for ViewBoxError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for ViewBoxError {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match *self {
             ViewBoxError::InvalidNumber => {
                 write!(f, "viewBox contains an invalid number")
@@ -26,7 +26,7 @@ impl std::fmt::Display for ViewBoxError {
     }
 }
 
-impl std::error::Error for ViewBoxError {
+impl core::error::Error for ViewBoxError {
     fn description(&self) -> &str {
         "a viewBox parsing error"
     }
@@ -51,7 +51,7 @@ impl ViewBox {
     }
 }
 
-impl std::str::FromStr for ViewBox {
+impl core::str::FromStr for ViewBox {
     type Err = ViewBoxError;
 
     fn from_str(text: &str) -> Result<Self, ViewBoxError> {
@@ -82,7 +82,8 @@ impl std::str::FromStr for ViewBox {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::str::FromStr;
+    use alloc::string::ToString;
+    use core::str::FromStr;
 
     macro_rules! test {
         ($name:ident, $text:expr, $result:expr) => (
