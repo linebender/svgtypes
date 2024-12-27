@@ -5,7 +5,7 @@ use crate::{Error, Stream};
 
 /// Representation of a path segment.
 ///
-/// If you want to change the segment type (for example MoveTo to LineTo)
+/// If you want to change the segment type (for example `MoveTo` to `LineTo`)
 /// you should create a new segment.
 /// But you still can change points or make segment relative or absolute.
 #[allow(missing_docs)]
@@ -81,8 +81,8 @@ pub enum PathSegment {
 /// # Notes
 ///
 /// The library does not support implicit commands, so they will be converted to an explicit one.
-/// It mostly affects an implicit MoveTo, which will be converted, according to the spec,
-/// into explicit LineTo.
+/// It mostly affects an implicit `MoveTo`, which will be converted, according to the spec,
+/// into an explicit `LineTo`.
 ///
 /// Example: `M 10 20 30 40 50 60` -> `M 10 20 L 30 40 L 50 60`
 ///
@@ -610,12 +610,12 @@ pub enum SimplePathSegment {
 /// A more high-level Path Data parser on top of [`PathParser`] that provides:
 ///
 /// - Relative to absolute segment coordinates conversion
-/// - ArcTo to CurveTos conversion
-/// - SmoothCurveTo and SmoothQuadratic conversion
-/// - HorizontalLineTo and VerticalLineTo to LineTo conversion
-/// - Implicit MoveTo after ClosePath handling
+/// - `ArcTo` to `CurveTo`s conversion
+/// - `SmoothCurveTo` and `SmoothQuadratic` conversion
+/// - `HorizontalLineTo` and `VerticalLineTo` to `LineTo` conversion
+/// - Implicit `MoveTo` after `ClosePath` handling
 ///
-/// In the end, only absolute MoveTo, LineTo, CurveTo, Quadratic and ClosePath segments
+/// In the end, only absolute `MoveTo`, `LineTo`, `CurveTo`, `Quadratic` and `ClosePath` segments
 /// will be produced.
 #[derive(Clone, Debug)]
 pub struct SimplifyingPathParser<'a> {

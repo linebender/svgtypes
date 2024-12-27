@@ -9,7 +9,7 @@ pub enum ViewBoxError {
     /// One of the numbers is invalid.
     InvalidNumber,
 
-    /// ViewBox has a negative or zero size.
+    /// `ViewBox` has a negative or zero size.
     InvalidSize,
 }
 
