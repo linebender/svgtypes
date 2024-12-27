@@ -373,7 +373,7 @@ impl<'a> Stream<'a> {
     /// The result can be empty.
     pub fn consume_bytes<F>(&mut self, f: F) -> &'a str
     where
-        F: Fn(&Stream, u8) -> bool,
+        F: Fn(&Stream<'_>, u8) -> bool,
     {
         let start = self.pos();
         self.skip_bytes(f);
@@ -383,7 +383,7 @@ impl<'a> Stream<'a> {
     /// Consumes bytes by the predicate.
     pub fn skip_bytes<F>(&mut self, f: F)
     where
-        F: Fn(&Stream, u8) -> bool,
+        F: Fn(&Stream<'_>, u8) -> bool,
     {
         while !self.at_end() {
             let c = self.curr_byte_unchecked();

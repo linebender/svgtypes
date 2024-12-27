@@ -74,7 +74,7 @@ pub enum TransformOriginError {
 }
 
 impl std::fmt::Display for TransformOriginError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
             TransformOriginError::MissingParameters => {
                 write!(f, "transform origin doesn't have enough parameters")
@@ -105,7 +105,7 @@ impl std::str::FromStr for TransformOrigin {
             return Err(TransformOriginError::MissingParameters);
         }
 
-        let parse_part = |stream: &mut Stream| {
+        let parse_part = |stream: &mut Stream<'_>| {
             if let Ok(dp) = stream.parse_directional_position() {
                 Some(Position::DirectionalPosition(dp))
             } else if let Ok(l) = stream.parse_length() {

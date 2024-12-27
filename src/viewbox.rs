@@ -14,7 +14,7 @@ pub enum ViewBoxError {
 }
 
 impl std::fmt::Display for ViewBoxError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
             ViewBoxError::InvalidNumber => {
                 write!(f, "viewBox contains an invalid number")

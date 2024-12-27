@@ -74,7 +74,7 @@ impl From<Error> for FilterValueListParserError {
 }
 
 impl std::fmt::Display for FilterValueListParserError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
             FilterValueListParserError::PercentageValue(pos) => {
                 write!(f, "a percentage value detected at position {}", pos)
@@ -271,7 +271,7 @@ fn parse_drop_shadow_func<'a>(
 }
 
 #[inline(never)]
-fn parse_generic_color_func(s: &mut Stream) -> Result<f64, FilterValueListParserError> {
+fn parse_generic_color_func(s: &mut Stream<'_>) -> Result<f64, FilterValueListParserError> {
     if s.is_curr_byte_eq(b')') {
         Ok(1.0)
     } else {
@@ -287,7 +287,7 @@ fn parse_generic_color_func(s: &mut Stream) -> Result<f64, FilterValueListParser
     }
 }
 
-fn parse_filter_length(s: &mut Stream) -> Result<Length, FilterValueListParserError> {
+fn parse_filter_length(s: &mut Stream<'_>) -> Result<Length, FilterValueListParserError> {
     let start = s.pos();
     let value = s.parse_length()?;
 
@@ -299,7 +299,7 @@ fn parse_filter_length(s: &mut Stream) -> Result<Length, FilterValueListParserEr
     Ok(value)
 }
 
-fn parse_filter_positive_length(s: &mut Stream) -> Result<Length, FilterValueListParserError> {
+fn parse_filter_positive_length(s: &mut Stream<'_>) -> Result<Length, FilterValueListParserError> {
     let start = s.pos();
     let value = s.parse_length()?;
 
@@ -317,7 +317,7 @@ fn parse_filter_positive_length(s: &mut Stream) -> Result<Length, FilterValueLis
 }
 
 // Just like a normal angle, but units are mandatory.
-fn parse_filter_angle(s: &mut Stream) -> Result<Angle, FilterValueListParserError> {
+fn parse_filter_angle(s: &mut Stream<'_>) -> Result<Angle, FilterValueListParserError> {
     s.skip_spaces();
 
     let start = s.pos();

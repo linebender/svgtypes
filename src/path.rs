@@ -143,7 +143,7 @@ impl Iterator for PathParser<'_> {
     }
 }
 
-fn next_impl(s: &mut Stream, prev_cmd: &mut Option<u8>) -> Result<PathSegment, Error> {
+fn next_impl(s: &mut Stream<'_>, prev_cmd: &mut Option<u8>) -> Result<PathSegment, Error> {
     let start = s.pos();
 
     let has_prev_cmd = prev_cmd.is_some();
@@ -320,7 +320,7 @@ fn is_number_start(c: u8) -> bool {
 
 // By the SVG spec 'large-arc' and 'sweep' must contain only one char
 // and can be written without any separators, e.g.: 10 20 30 01 10 20.
-fn parse_flag(s: &mut Stream) -> Result<bool, Error> {
+fn parse_flag(s: &mut Stream<'_>) -> Result<bool, Error> {
     s.skip_spaces();
 
     let c = s.curr_byte()?;
