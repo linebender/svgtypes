@@ -1,9 +1,12 @@
 // Copyright 2021 the SVG Types Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use std::f64;
+use core::f64;
 
 use crate::{Error, Stream};
+
+#[cfg(not(feature = "std"))]
+use kurbo::common::FloatFuncs;
 
 /// Representation of the [`<transform>`] type.
 ///
@@ -223,7 +226,7 @@ impl TransformListParser<'_> {
     }
 }
 
-impl std::str::FromStr for Transform {
+impl core::str::FromStr for Transform {
     type Err = Error;
 
     fn from_str(text: &str) -> Result<Self, Error> {
@@ -279,7 +282,7 @@ fn multiply(ts1: &Transform, ts2: &Transform) -> Transform {
 #[rustfmt::skip]
 #[cfg(test)]
 mod tests {
-    use std::str::FromStr;
+    use core::str::FromStr;
     use super::*;
 
     macro_rules! test {
