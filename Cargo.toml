@@ -7,7 +7,9 @@ description = "SVG types parser."
 documentation = "https://docs.rs/svgtypes/"
 keywords = ["svg", "parser", "tokenizer"]
 license = "Apache-2.0 OR MIT"
-edition = "2018"
+edition = "2021"
+# Keep in sync with RUST_MIN_VER in .github/workflows/ci.yml
+rust-version = "1.65"
 readme = "README.md"
 repository = "https://github.com/RazrFalcon/svgtypes"
 exclude = ["benches/", "codegen/", "fuzz/"]
