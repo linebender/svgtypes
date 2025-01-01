@@ -3,6 +3,9 @@
 
 use crate::{colors, ByteExt, Error, Stream};
 
+#[cfg(not(feature = "std"))]
+use kurbo::common::FloatFuncs;
+
 /// Representation of the [`<color>`] type.
 ///
 /// [`<color>`]: https://www.w3.org/TR/css-color-3/
@@ -75,7 +78,7 @@ impl Color {
     }
 }
 
-impl std::str::FromStr for Color {
+impl core::str::FromStr for Color {
     type Err = Error;
 
     /// Parses [CSS3](https://www.w3.org/TR/css-color-3/) `Color` from a string.
@@ -302,7 +305,7 @@ fn hue_to_rgb(t1: f32, t2: f32, mut hue: f32) -> f32 {
 
 #[inline]
 fn bound<T: Ord>(min: T, val: T, max: T) -> T {
-    std::cmp::max(min, std::cmp::min(max, val))
+    core::cmp::max(min, core::cmp::min(max, val))
 }
 
 #[inline]
@@ -316,7 +319,7 @@ fn f64_bound(min: f64, val: f64, max: f64) -> f64 {
 #[rustfmt::skip]
 #[cfg(test)]
 mod tests {
-    use std::str::FromStr;
+    use core::str::FromStr;
     use crate::Color;
 
     macro_rules! test {

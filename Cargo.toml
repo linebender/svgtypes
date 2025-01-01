@@ -16,6 +16,11 @@ exclude = [".github", ".clippy.toml", ".gitignore", ".typos.toml", "benches/", "
 [workspace]
 members = ["benches"]
 
+[features]
+default = ["std"]
+std = ["kurbo/std"]
+libm = ["kurbo/libm"]
+
 [dependencies]
 siphasher = "1.0" # perfect hash implementation for color names
-kurbo = "0.11" # ArcTo to CurveTo(s)
+kurbo = { version = "0.11", default-features = false } # ArcTo to CurveTo(s)
