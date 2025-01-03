@@ -310,7 +310,7 @@ fn f64_bound(min: f64, val: f64, max: f64) -> f64 {
     debug_assert!(min.is_finite());
     debug_assert!(val.is_finite());
     debug_assert!(max.is_finite());
-    val.max(min).min(max)
+    val.clamp(min, max)
 }
 
 #[rustfmt::skip]
