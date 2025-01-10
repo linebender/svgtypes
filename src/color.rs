@@ -181,7 +181,9 @@ impl Stream<'_> {
                 self.parse_list_separator();
 
                 if is_percent {
-                    color.red = (value / 100.0 * 255.0).round() as u8;
+                    // The division and multiply are explicitly not collapsed, to ensure the red
+                    // component has the same rounding behavior as the green and blue components.
+                    color.red = ((value / 100.0) * 255.0).round() as u8;
                     color.green = (self.parse_list_number_or_percent()? * 255.0).round() as u8;
                     color.blue = (self.parse_list_number_or_percent()? * 255.0).round() as u8;
                 } else {
@@ -192,8 +194,7 @@ impl Stream<'_> {
 
                 self.skip_spaces();
                 if !self.starts_with(b")") {
-                    color.alpha =
-                        (f64_bound(0.0, self.parse_list_number()?, 1.0) * 255.0).round() as u8;
+                    color.alpha = (self.parse_list_number()? * 255.0).round() as u8;
                 }
 
                 self.skip_spaces();
@@ -211,8 +212,7 @@ impl Stream<'_> {
 
                 self.skip_spaces();
                 if !self.starts_with(b")") {
-                    color.alpha =
-                        (f64_bound(0.0, self.parse_list_number()?, 1.0) * 255.0).round() as u8;
+                    color.alpha = (self.parse_list_number()? * 255.0).round() as u8;
                 }
 
                 self.skip_spaces();
