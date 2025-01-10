@@ -30,6 +30,7 @@ Many thanks to Yevhenii Reizner for the years of hard work that he has poured in
 ### Changed
 
 - Set the MSRV in `Cargo.toml` and updated the edition to 2021. ([#40][] by [@tomcur][])
+- Simplify color component rounding and bounds checking. ([#43][] , [#44][] by [@tomcur][])
 
 ## [0.15.2][] (2024-08-20)
 
@@ -265,6 +266,8 @@ Many thanks to Yevhenii Reizner for the years of hard work that he has poured in
 [#34]: https://github.com/linebender/svgtypes/pull/34
 [#35]: https://github.com/linebender/svgtypes/pull/35
 [#40]: https://github.com/linebender/svgtypes/pull/40
+[#43]: https://github.com/linebender/svgtypes/pull/43
+[#44]: https://github.com/linebender/svgtypes/pull/44
 
 [@demurgos]: https://github.com/demurgos
 [@erxclau]: https://github.com/erxclau
