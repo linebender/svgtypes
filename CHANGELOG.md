@@ -8,10 +8,14 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 -->
 
-The latest published SVG Types release is [0.15.2](#0151-2024-08-20) which was released on 2024-08-20.
-You can find its changes [documented below](#0151-2024-08-20).
+The latest published SVG Types release is [0.15.3](#0153-2025-01-20) which was released on 2025-01-20.
+You can find its changes [documented below](#0153-2025-01-20).
 
 ## [Unreleased]
+
+This release has an [MSRV][] of 1.65.
+
+## [0.15.3][] (2025-01-20)
 
 This release has an [MSRV][] of 1.65.
 
@@ -277,7 +281,8 @@ Many thanks to Yevhenii Reizner for the years of hard work that he has poured in
 [@waywardmonkeys]: https://github.com/waywardmonkeys
 [@yisibl]: https://github.com/yisibl
 
-[Unreleased]: https://github.com/RazrFalcon/svgtypes/compare/v0.15.2...HEAD
+[Unreleased]: https://github.com/RazrFalcon/svgtypes/compare/v0.15.3...HEAD
+[0.15.2]: https://github.com/RazrFalcon/svgtypes/compare/v0.15.2...v0.15.3
 [0.15.2]: https://github.com/RazrFalcon/svgtypes/compare/v0.15.1...v0.15.2
 [0.15.1]: https://github.com/RazrFalcon/svgtypes/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/RazrFalcon/svgtypes/compare/v0.14.0...v0.15.0
