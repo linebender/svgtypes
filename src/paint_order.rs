@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use crate::stream::Stream;
+use alloc::vec;
+use alloc::vec::Vec;
 
 /// [`paint-order`] property variants.
 ///
@@ -45,7 +47,7 @@ impl From<[PaintOrderKind; 3]> for PaintOrder {
     }
 }
 
-impl std::str::FromStr for PaintOrder {
+impl core::str::FromStr for PaintOrder {
     type Err = ();
 
     /// Parses `PaintOrder` from a string.
@@ -112,7 +114,7 @@ impl std::str::FromStr for PaintOrder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::str::FromStr;
+    use core::str::FromStr;
 
     #[test]
     fn parse_1() {
