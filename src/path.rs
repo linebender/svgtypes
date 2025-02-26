@@ -287,11 +287,7 @@ impl PathParser<'_> {
     /// ```
     ///
     pub fn path_segments(&self) -> Result<Vec<PathSegment>, Error> {
-        let mut segments = Vec::new();
-        for segment in *self {
-            segments.push(segment?);
-        }
-        Ok(segments)
+        self.collect::<Result<Vec<_>, _>>()
     }
 
     /// Returns the path data as a string.
