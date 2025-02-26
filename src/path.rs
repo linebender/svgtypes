@@ -297,15 +297,15 @@ impl PathParser<'_> {
     /// ```
     /// use svgtypes::{PathParser, PathSegment};
     ///
-    /// let mut segment_str = PathParser::from("M10-20l30.1.5.1-20z").path_data().unwrap();
+    /// let mut segment_str = PathParser::from("M10-20l30.1.5.1-20z").path_data("").unwrap();
     ///
-    /// assert_eq!(segment_str, "M10 -20 l30.1 0.5 l0.1 -20 z");
+    /// assert_eq!(segment_str, "M10 -20l30.1 0.5l0.1 -20z");
     /// ```
     ///
-    pub fn path_data(&self) -> Result<String, Error> {
+    pub fn path_data(&self, separator: &str) -> Result<String, Error> {
         let segments = self.path_segments()?;
         let strings = segments.iter().map(|s| s.to_string());
-        Ok(strings.collect::<Vec<String>>().join(" "))
+        Ok(strings.collect::<Vec<String>>().join(separator))
     }
 }
 
