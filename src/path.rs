@@ -85,13 +85,13 @@ impl PathSegment {
     ///     segments.push(segment.unwrap());
     /// }
     ///
-    /// assert_eq!(segments[0].abs(), true);
-    /// assert_eq!(segments[1].abs(), false);
-    /// assert_eq!(segments[2].abs(), false);
-    /// assert_eq!(segments[3].abs(), false);
+    /// assert_eq!(segments[0].is_abs(), true);
+    /// assert_eq!(segments[1].is_abs(), false);
+    /// assert_eq!(segments[2].is_abs(), false);
+    /// assert_eq!(segments[3].is_abs(), false);
     /// ```
     ///
-    pub fn abs(&self) -> bool {
+    pub fn is_abs(&self) -> bool {
         match *self {
             Self::MoveTo { abs, .. } => abs,
             Self::LineTo { abs, .. } => abs,
@@ -118,37 +118,37 @@ impl PathSegment {
     ///     segments.push(segment.unwrap());
     /// }
     ///
-    /// assert_eq!(segments[0].get_letter(), 'M');
-    /// assert_eq!(segments[1].get_letter(), 'l');
-    /// assert_eq!(segments[2].get_letter(), 'l');
-    /// assert_eq!(segments[3].get_letter(), 'z');
+    /// assert_eq!(segments[0].command(), b'M');
+    /// assert_eq!(segments[1].command(), b'l');
+    /// assert_eq!(segments[2].command(), b'l');
+    /// assert_eq!(segments[3].command(), b'z');
     /// ```
     ///
-    pub fn get_letter(&self) -> char {
-        match self.abs() {
+    pub fn command(&self) -> u8 {
+        match self.is_abs() {
             true => match *self {
-                Self::MoveTo { .. } => 'M',
-                Self::LineTo { .. } => 'L',
-                Self::HorizontalLineTo { .. } => 'H',
-                Self::VerticalLineTo { .. } => 'V',
-                Self::CurveTo { .. } => 'C',
-                Self::SmoothCurveTo { .. } => 'S',
-                Self::Quadratic { .. } => 'Q',
-                Self::SmoothQuadratic { .. } => 'T',
-                Self::EllipticalArc { .. } => 'A',
-                Self::ClosePath { .. } => 'Z',
+                Self::MoveTo { .. } => b'M',
+                Self::LineTo { .. } => b'L',
+                Self::HorizontalLineTo { .. } => b'H',
+                Self::VerticalLineTo { .. } => b'V',
+                Self::CurveTo { .. } => b'C',
+                Self::SmoothCurveTo { .. } => b'S',
+                Self::Quadratic { .. } => b'Q',
+                Self::SmoothQuadratic { .. } => b'T',
+                Self::EllipticalArc { .. } => b'A',
+                Self::ClosePath { .. } => b'Z',
             },
             false => match *self {
-                Self::MoveTo { .. } => 'm',
-                Self::LineTo { .. } => 'l',
-                Self::HorizontalLineTo { .. } => 'h',
-                Self::VerticalLineTo { .. } => 'v',
-                Self::CurveTo { .. } => 'c',
-                Self::SmoothCurveTo { .. } => 's',
-                Self::Quadratic { .. } => 'q',
-                Self::SmoothQuadratic { .. } => 't',
-                Self::EllipticalArc { .. } => 'a',
-                Self::ClosePath { .. } => 'z',
+                Self::MoveTo { .. } => b'm',
+                Self::LineTo { .. } => b'l',
+                Self::HorizontalLineTo { .. } => b'h',
+                Self::VerticalLineTo { .. } => b'v',
+                Self::CurveTo { .. } => b'c',
+                Self::SmoothCurveTo { .. } => b's',
+                Self::Quadratic { .. } => b'q',
+                Self::SmoothQuadratic { .. } => b't',
+                Self::EllipticalArc { .. } => b'a',
+                Self::ClosePath { .. } => b'z',
             },
         }
     }
@@ -659,9 +659,9 @@ mod tests {
 
     #[test]
     fn test_helper_functions(){
-        assert!(PathSegment::MoveTo { abs: true, x: 0.0, y: 0.0 }.abs());
-        assert!(!PathSegment::MoveTo { abs: false, x: 0.0, y: 0.0 }.abs()); // asserting false
-        assert_eq!(PathSegment::MoveTo { abs: true, x: 0.0, y: 0.0 }.get_letter(), 'M');
+        assert!(PathSegment::MoveTo { abs: true, x: 0.0, y: 0.0 }.is_abs());
+        assert!(!PathSegment::MoveTo { abs: false, x: 0.0, y: 0.0 }.is_abs()); // asserting false
+        assert_eq!(PathSegment::MoveTo { abs: true, x: 0.0, y: 0.0 }.command(), b'M');
     }
 }
 
