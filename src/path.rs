@@ -72,6 +72,88 @@ pub enum PathSegment {
     },
 }
 
+impl PathSegment {
+    /// Returns `true` if the segment is absolute.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use svgtypes::{PathParser, PathSegment};
+    ///
+    /// let mut segments = Vec::new();
+    /// for segment in PathParser::from("M10-20l30.1.5.1-20z") {
+    ///     segments.push(segment.unwrap());
+    /// }
+    ///
+    /// assert_eq!(segments[0].abs(), true);
+    /// assert_eq!(segments[1].abs(), false);
+    /// assert_eq!(segments[2].abs(), false);
+    /// assert_eq!(segments[3].abs(), false);
+    /// ```
+    ///
+    pub fn abs(&self) -> bool {
+        match *self {
+            Self::MoveTo { abs, .. } => abs,
+            Self::LineTo { abs, .. } => abs,
+            Self::HorizontalLineTo { abs, .. } => abs,
+            Self::VerticalLineTo { abs, .. } => abs,
+            Self::CurveTo { abs, .. } => abs,
+            Self::SmoothCurveTo { abs, .. } => abs,
+            Self::Quadratic { abs, .. } => abs,
+            Self::SmoothQuadratic { abs, .. } => abs,
+            Self::EllipticalArc { abs, .. } => abs,
+            Self::ClosePath { abs } => abs,
+        }
+    }
+
+    /// Returns the segment letter.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use svgtypes::{PathParser, PathSegment};
+    ///
+    /// let mut segments = Vec::new();
+    /// for segment in PathParser::from("M10-20l30.1.5.1-20z") {
+    ///     segments.push(segment.unwrap());
+    /// }
+    ///
+    /// assert_eq!(segments[0].get_letter(), 'M');
+    /// assert_eq!(segments[1].get_letter(), 'l');
+    /// assert_eq!(segments[2].get_letter(), 'l');
+    /// assert_eq!(segments[3].get_letter(), 'z');
+    /// ```
+    ///
+    pub fn get_letter(&self) -> char {
+        match self.abs() {
+            true => match *self {
+                Self::MoveTo { .. } => 'M',
+                Self::LineTo { .. } => 'L',
+                Self::HorizontalLineTo { .. } => 'H',
+                Self::VerticalLineTo { .. } => 'V',
+                Self::CurveTo { .. } => 'C',
+                Self::SmoothCurveTo { .. } => 'S',
+                Self::Quadratic { .. } => 'Q',
+                Self::SmoothQuadratic { .. } => 'T',
+                Self::EllipticalArc { .. } => 'A',
+                Self::ClosePath { .. } => 'Z',
+            },
+            false => match *self {
+                Self::MoveTo { .. } => 'm',
+                Self::LineTo { .. } => 'l',
+                Self::HorizontalLineTo { .. } => 'h',
+                Self::VerticalLineTo { .. } => 'v',
+                Self::CurveTo { .. } => 'c',
+                Self::SmoothCurveTo { .. } => 's',
+                Self::Quadratic { .. } => 'q',
+                Self::SmoothQuadratic { .. } => 't',
+                Self::EllipticalArc { .. } => 'a',
+                Self::ClosePath { .. } => 'z',
+            },
+        }
+    }
+}
+
 /// A pull-based [path data] parser.
 ///
 /// # Errors
@@ -574,6 +656,13 @@ mod tests {
         PathSegment::ClosePath { abs: true },
         PathSegment::HorizontalLineTo { abs: true, x: 10.0 }
     );
+
+    #[test]
+    fn test_helper_functions(){
+        assert!(PathSegment::MoveTo { abs: true, x: 0.0, y: 0.0 }.abs());
+        assert!(!PathSegment::MoveTo { abs: false, x: 0.0, y: 0.0 }.abs()); // asserting false
+        assert_eq!(PathSegment::MoveTo { abs: true, x: 0.0, y: 0.0 }.get_letter(), 'M');
+    }
 }
 
 /// Representation of a simple path segment.
