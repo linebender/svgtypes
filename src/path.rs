@@ -1,6 +1,8 @@
 // Copyright 2021 the SVG Types Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+use std::fmt;
+
 use crate::{Error, Stream};
 
 /// Representation of a path segment.
@@ -154,6 +156,79 @@ impl PathSegment {
     }
 }
 
+impl fmt::Display for PathSegment {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let cmd = self.command() as char;
+        match self {
+            Self::MoveTo { abs: _, x, y } => {
+                write!(f, "{}{} {}", cmd, x, y)
+            }
+            Self::LineTo { abs: _, x, y } => {
+                write!(f, "{}{} {}", cmd, x, y)
+            }
+            Self::HorizontalLineTo { abs: _, x } => {
+                write!(f, "{}{}", cmd, x)
+            }
+            Self::VerticalLineTo { abs: _, y } => {
+                write!(f, "{}{}", cmd, y)
+            }
+            Self::CurveTo {
+                abs: _,
+                x1,
+                y1,
+                x2,
+                y2,
+                x,
+                y,
+            } => {
+                write!(f, "{}{} {} {} {} {} {}", cmd, x1, y1, x2, y2, x, y)
+            }
+            Self::SmoothCurveTo {
+                abs: _,
+                x2,
+                y2,
+                x,
+                y,
+            } => {
+                write!(f, "{}{} {} {} {}", cmd, x2, y2, x, y)
+            }
+            Self::Quadratic {
+                abs: _,
+                x1,
+                y1,
+                x,
+                y,
+            } => {
+                write!(f, "{}{} {} {} {}", cmd, x1, y1, x, y)
+            }
+            Self::SmoothQuadratic { abs: _, x, y } => {
+                write!(f, "{}{} {}", cmd, x, y)
+            }
+            Self::EllipticalArc {
+                abs: _,
+                rx,
+                ry,
+                x_axis_rotation,
+                large_arc,
+                sweep,
+                x,
+                y,
+            } => {
+                let large_arc = if *large_arc { 1 } else { 0 };
+                let sweep = if *sweep { 1 } else { 0 };
+                write!(
+                    f,
+                    "{}{} {} {} {} {} {} {}",
+                    cmd, rx, ry, x_axis_rotation, large_arc, sweep, x, y
+                )
+            }
+            Self::ClosePath { .. } => {
+                write!(f, "{}", cmd)
+            }
+        }
+    }
+}
+
 /// A pull-based [path data] parser.
 ///
 /// # Errors
@@ -191,6 +266,51 @@ impl PathSegment {
 pub struct PathParser<'a> {
     stream: Stream<'a>,
     prev_cmd: Option<u8>,
+}
+
+impl PathParser<'_> {
+    /// Returns the path segments vector.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use svgtypes::{PathParser, PathSegment};
+    ///
+    /// let mut segments = PathParser::from("M10-20l30.1.5.1-20z").path_segments().unwrap();
+    ///
+    /// assert_eq!(segments, &[
+    ///     PathSegment::MoveTo { abs: true, x: 10.0, y: -20.0 },
+    ///     PathSegment::LineTo { abs: false, x: 30.1, y: 0.5 },
+    ///     PathSegment::LineTo { abs: false, x: 0.1, y: -20.0 },
+    ///     PathSegment::ClosePath { abs: false },
+    /// ]);
+    /// ```
+    ///
+    pub fn path_segments(&self) -> Result<Vec<PathSegment>, Error> {
+        let mut segments = Vec::new();
+        for segment in *self {
+            segments.push(segment?);
+        }
+        Ok(segments)
+    }
+
+    /// Returns the path data as a string.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use svgtypes::{PathParser, PathSegment};
+    ///
+    /// let mut segment_str = PathParser::from("M10-20l30.1.5.1-20z").path_data().unwrap();
+    ///
+    /// assert_eq!(segment_str, "M10 -20 l30.1 0.5 l0.1 -20 z");
+    /// ```
+    ///
+    pub fn path_data(&self) -> Result<String, Error> {
+        let segments = self.path_segments()?;
+        let strings = segments.iter().map(|s| s.to_string());
+        Ok(strings.collect::<Vec<String>>().join(" "))
+    }
 }
 
 impl<'a> From<&'a str> for PathParser<'a> {
