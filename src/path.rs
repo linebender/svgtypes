@@ -1,8 +1,6 @@
 // Copyright 2021 the SVG Types Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use std::fmt;
-
 use crate::{Error, Stream};
 
 /// Representation of a path segment.
@@ -152,79 +150,6 @@ impl PathSegment {
                 Self::EllipticalArc { .. } => b'a',
                 Self::ClosePath { .. } => b'z',
             },
-        }
-    }
-}
-
-impl fmt::Display for PathSegment {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let cmd = self.command() as char;
-        match self {
-            Self::MoveTo { abs: _, x, y } => {
-                write!(f, "{}{} {}", cmd, x, y)
-            }
-            Self::LineTo { abs: _, x, y } => {
-                write!(f, "{}{} {}", cmd, x, y)
-            }
-            Self::HorizontalLineTo { abs: _, x } => {
-                write!(f, "{}{}", cmd, x)
-            }
-            Self::VerticalLineTo { abs: _, y } => {
-                write!(f, "{}{}", cmd, y)
-            }
-            Self::CurveTo {
-                abs: _,
-                x1,
-                y1,
-                x2,
-                y2,
-                x,
-                y,
-            } => {
-                write!(f, "{}{} {} {} {} {} {}", cmd, x1, y1, x2, y2, x, y)
-            }
-            Self::SmoothCurveTo {
-                abs: _,
-                x2,
-                y2,
-                x,
-                y,
-            } => {
-                write!(f, "{}{} {} {} {}", cmd, x2, y2, x, y)
-            }
-            Self::Quadratic {
-                abs: _,
-                x1,
-                y1,
-                x,
-                y,
-            } => {
-                write!(f, "{}{} {} {} {}", cmd, x1, y1, x, y)
-            }
-            Self::SmoothQuadratic { abs: _, x, y } => {
-                write!(f, "{}{} {}", cmd, x, y)
-            }
-            Self::EllipticalArc {
-                abs: _,
-                rx,
-                ry,
-                x_axis_rotation,
-                large_arc,
-                sweep,
-                x,
-                y,
-            } => {
-                let large_arc = if *large_arc { 1 } else { 0 };
-                let sweep = if *sweep { 1 } else { 0 };
-                write!(
-                    f,
-                    "{}{} {} {} {} {} {} {}",
-                    cmd, rx, ry, x_axis_rotation, large_arc, sweep, x, y
-                )
-            }
-            Self::ClosePath { .. } => {
-                write!(f, "{}", cmd)
-            }
         }
     }
 }
