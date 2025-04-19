@@ -160,7 +160,7 @@ impl<'a> FontShorthand<'a> {
                 | "700" | "800" | "900" => font_weight = Some(ident),
                 "ultra-condensed" | "extra-condensed" | "condensed" | "semi-condensed"
                 | "semi-expanded" | "expanded" | "extra-expanded" | "ultra-expanded" => {
-                    font_stretch = Some(ident)
+                    font_stretch = Some(ident);
                 }
                 _ => {
                     // Not one of the 4 properties, so we backtrack and then start
