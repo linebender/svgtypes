@@ -49,19 +49,19 @@ pub enum Error {
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            Error::UnexpectedEndOfStream => {
+            Self::UnexpectedEndOfStream => {
                 write!(f, "unexpected end of stream")
             }
-            Error::UnexpectedData(pos) => {
+            Self::UnexpectedData(pos) => {
                 write!(f, "unexpected data at position {}", pos)
             }
-            Error::InvalidValue => {
+            Self::InvalidValue => {
                 write!(f, "invalid value")
             }
-            Error::InvalidIdent => {
+            Self::InvalidIdent => {
                 write!(f, "invalid ident")
             }
-            Error::InvalidChar(ref chars, pos) => {
+            Self::InvalidChar(ref chars, pos) => {
                 // Vec<u8> -> Vec<String>
                 let list: Vec<String> = chars
                     .iter()
@@ -77,7 +77,7 @@ impl std::fmt::Display for Error {
                     pos
                 )
             }
-            Error::InvalidString(ref strings, pos) => {
+            Self::InvalidString(ref strings, pos) => {
                 write!(
                     f,
                     "expected '{}' not '{}' at position {}",
@@ -86,7 +86,7 @@ impl std::fmt::Display for Error {
                     pos
                 )
             }
-            Error::InvalidNumber(pos) => {
+            Self::InvalidNumber(pos) => {
                 write!(f, "invalid number at position {}", pos)
             }
         }

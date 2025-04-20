@@ -18,8 +18,8 @@ pub struct Color {
 impl Color {
     /// Constructs a new `Color` from RGB values.
     #[inline]
-    pub fn new_rgb(red: u8, green: u8, blue: u8) -> Color {
-        Color {
+    pub fn new_rgb(red: u8, green: u8, blue: u8) -> Self {
+        Self {
             red,
             green,
             blue,
@@ -29,8 +29,8 @@ impl Color {
 
     /// Constructs a new `Color` from RGBA values.
     #[inline]
-    pub fn new_rgba(red: u8, green: u8, blue: u8, alpha: u8) -> Color {
-        Color {
+    pub fn new_rgba(red: u8, green: u8, blue: u8, alpha: u8) -> Self {
+        Self {
             red,
             green,
             blue,
@@ -40,38 +40,38 @@ impl Color {
 
     /// Constructs a new `Color` set to black.
     #[inline]
-    pub fn black() -> Color {
-        Color::new_rgb(0, 0, 0)
+    pub fn black() -> Self {
+        Self::new_rgb(0, 0, 0)
     }
 
     /// Constructs a new `Color` set to white.
     #[inline]
-    pub fn white() -> Color {
-        Color::new_rgb(255, 255, 255)
+    pub fn white() -> Self {
+        Self::new_rgb(255, 255, 255)
     }
 
     /// Constructs a new `Color` set to gray.
     #[inline]
-    pub fn gray() -> Color {
-        Color::new_rgb(128, 128, 128)
+    pub fn gray() -> Self {
+        Self::new_rgb(128, 128, 128)
     }
 
     /// Constructs a new `Color` set to red.
     #[inline]
-    pub fn red() -> Color {
-        Color::new_rgb(255, 0, 0)
+    pub fn red() -> Self {
+        Self::new_rgb(255, 0, 0)
     }
 
     /// Constructs a new `Color` set to green.
     #[inline]
-    pub fn green() -> Color {
-        Color::new_rgb(0, 128, 0)
+    pub fn green() -> Self {
+        Self::new_rgb(0, 128, 0)
     }
 
     /// Constructs a new `Color` set to blue.
     #[inline]
-    pub fn blue() -> Color {
-        Color::new_rgb(0, 0, 255)
+    pub fn blue() -> Self {
+        Self::new_rgb(0, 0, 255)
     }
 }
 
