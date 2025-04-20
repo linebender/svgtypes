@@ -15,15 +15,15 @@ enum Position {
 impl Position {
     fn is_vertical(&self) -> bool {
         match self {
-            Position::Length(_) => true,
-            Position::DirectionalPosition(dp) => dp.is_vertical(),
+            Self::Length(_) => true,
+            Self::DirectionalPosition(dp) => dp.is_vertical(),
         }
     }
 
     fn is_horizontal(&self) -> bool {
         match self {
-            Position::Length(_) => true,
-            Position::DirectionalPosition(dp) => dp.is_horizontal(),
+            Self::Length(_) => true,
+            Self::DirectionalPosition(dp) => dp.is_horizontal(),
         }
     }
 }
@@ -54,7 +54,7 @@ impl TransformOrigin {
     /// Constructs a new transform origin.
     #[inline]
     pub fn new(x_offset: Length, y_offset: Length, z_offset: Length) -> Self {
-        TransformOrigin {
+        Self {
             x_offset,
             y_offset,
             z_offset,
@@ -76,13 +76,13 @@ pub enum TransformOriginError {
 impl std::fmt::Display for TransformOriginError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            TransformOriginError::MissingParameters => {
+            Self::MissingParameters => {
                 write!(f, "transform origin doesn't have enough parameters")
             }
-            TransformOriginError::InvalidParameters => {
+            Self::InvalidParameters => {
                 write!(f, "transform origin has invalid parameters")
             }
-            TransformOriginError::ZIndexIsPercentage => {
+            Self::ZIndexIsPercentage => {
                 write!(f, "z-index cannot be a percentage")
             }
         }
@@ -150,7 +150,7 @@ impl std::str::FromStr for TransformOrigin {
                     (DirectionalPosition::Center.into(), p.into())
                 };
 
-                TransformOrigin::new(x_offset, y_offset, Length::new(0.0, LengthUnit::Px))
+                Self::new(x_offset, y_offset, Length::new(0.0, LengthUnit::Px))
             }
             (Some(p1), Some(p2), length) => {
                 if let Some(length) = length {
@@ -169,13 +169,13 @@ impl std::str::FromStr for TransformOrigin {
                 let only_keyword_is_center = check(p1) && check(p2);
 
                 if only_keyword_is_center {
-                    TransformOrigin::new(p1.into(), p2.into(), length)
+                    Self::new(p1.into(), p2.into(), length)
                 } else {
                     // There is at least one of `left`, `right`, `top`, or `bottom`
                     if p1.is_horizontal() && p2.is_vertical() {
-                        TransformOrigin::new(p1.into(), p2.into(), length)
+                        Self::new(p1.into(), p2.into(), length)
                     } else if p1.is_vertical() && p2.is_horizontal() {
-                        TransformOrigin::new(p2.into(), p1.into(), length)
+                        Self::new(p2.into(), p1.into(), length)
                     } else {
                         return Err(TransformOriginError::InvalidParameters);
                     }

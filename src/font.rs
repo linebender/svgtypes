@@ -38,12 +38,12 @@ pub enum FontFamily {
 impl Display for FontFamily {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let str = match self {
-            FontFamily::Monospace => "monospace".to_string(),
-            FontFamily::Serif => "serif".to_string(),
-            FontFamily::SansSerif => "sans-serif".to_string(),
-            FontFamily::Cursive => "cursive".to_string(),
-            FontFamily::Fantasy => "fantasy".to_string(),
-            FontFamily::Named(s) => format!("\"{}\"", s),
+            Self::Monospace => "monospace".to_string(),
+            Self::Serif => "serif".to_string(),
+            Self::SansSerif => "sans-serif".to_string(),
+            Self::Cursive => "cursive".to_string(),
+            Self::Fantasy => "fantasy".to_string(),
+            Self::Named(s) => format!("\"{}\"", s),
         };
         write!(f, "{}", str)
     }

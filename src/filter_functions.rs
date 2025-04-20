@@ -69,33 +69,33 @@ pub enum FilterValueListParserError {
 
 impl From<Error> for FilterValueListParserError {
     fn from(e: Error) -> Self {
-        FilterValueListParserError::StreamErrors(e)
+        Self::StreamErrors(e)
     }
 }
 
 impl std::fmt::Display for FilterValueListParserError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            FilterValueListParserError::PercentageValue(pos) => {
+            Self::PercentageValue(pos) => {
                 write!(f, "a percentage value detected at position {}", pos)
             }
-            FilterValueListParserError::NegativeValue(pos) => {
+            Self::NegativeValue(pos) => {
                 write!(f, "a negative value detected at position {}", pos)
             }
-            FilterValueListParserError::InvalidAngle(pos) => {
+            Self::InvalidAngle(pos) => {
                 write!(f, "an invalid angle at position {}", pos)
             }
-            FilterValueListParserError::MissingDropShadowOffset(pos) => {
+            Self::MissingDropShadowOffset(pos) => {
                 write!(
                     f,
                     "drop-shadow offset values are expected at position {}",
                     pos
                 )
             }
-            FilterValueListParserError::InvalidUrl(pos) => {
+            Self::InvalidUrl(pos) => {
                 write!(f, "an invalid url at position {}", pos)
             }
-            FilterValueListParserError::StreamErrors(ref e) => {
+            Self::StreamErrors(ref e) => {
                 write!(f, "{}", e)
             }
         }

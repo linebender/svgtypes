@@ -86,7 +86,7 @@ impl std::str::FromStr for AspectRatio {
             };
         }
 
-        Ok(AspectRatio {
+        Ok(Self {
             defer,
             align,
             slice,
@@ -97,7 +97,7 @@ impl std::str::FromStr for AspectRatio {
 impl Default for AspectRatio {
     #[inline]
     fn default() -> Self {
-        AspectRatio {
+        Self {
             defer: false,
             align: Align::XMidYMid,
             slice: false,
