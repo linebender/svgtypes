@@ -19,7 +19,7 @@ pub enum EnableBackground {
     },
 }
 
-impl std::str::FromStr for EnableBackground {
+impl core::str::FromStr for EnableBackground {
     type Err = Error;
 
     fn from_str(text: &str) -> Result<Self, Self::Err> {
@@ -71,7 +71,8 @@ impl std::str::FromStr for EnableBackground {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::str::FromStr;
+    use alloc::string::ToString;
+    use core::str::FromStr;
 
     #[test]
     fn parse_1() {
