@@ -112,6 +112,7 @@ impl<'a> Stream<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use alloc::string::ToString;
 
     #[test]
     fn parse_iri_1() {
