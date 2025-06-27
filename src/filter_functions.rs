@@ -77,26 +77,25 @@ impl std::fmt::Display for FilterValueListParserError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
             Self::PercentageValue(pos) => {
-                write!(f, "a percentage value detected at position {}", pos)
+                write!(f, "a percentage value detected at position {pos}")
             }
             Self::NegativeValue(pos) => {
-                write!(f, "a negative value detected at position {}", pos)
+                write!(f, "a negative value detected at position {pos}")
             }
             Self::InvalidAngle(pos) => {
-                write!(f, "an invalid angle at position {}", pos)
+                write!(f, "an invalid angle at position {pos}")
             }
             Self::MissingDropShadowOffset(pos) => {
                 write!(
                     f,
-                    "drop-shadow offset values are expected at position {}",
-                    pos
+                    "drop-shadow offset values are expected at position {pos}"
                 )
             }
             Self::InvalidUrl(pos) => {
-                write!(f, "an invalid url at position {}", pos)
+                write!(f, "an invalid url at position {pos}")
             }
             Self::StreamErrors(ref e) => {
-                write!(f, "{}", e)
+                write!(f, "{e}")
             }
         }
     }
