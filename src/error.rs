@@ -53,7 +53,7 @@ impl std::fmt::Display for Error {
                 write!(f, "unexpected end of stream")
             }
             Self::UnexpectedData(pos) => {
-                write!(f, "unexpected data at position {}", pos)
+                write!(f, "unexpected data at position {pos}")
             }
             Self::InvalidValue => {
                 write!(f, "invalid value")
@@ -87,7 +87,7 @@ impl std::fmt::Display for Error {
                 )
             }
             Self::InvalidNumber(pos) => {
-                write!(f, "invalid number at position {}", pos)
+                write!(f, "invalid number at position {pos}")
             }
         }
     }

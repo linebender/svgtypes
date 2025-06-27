@@ -43,9 +43,9 @@ impl Display for FontFamily {
             Self::SansSerif => "sans-serif".to_string(),
             Self::Cursive => "cursive".to_string(),
             Self::Fantasy => "fantasy".to_string(),
-            Self::Named(s) => format!("\"{}\"", s),
+            Self::Named(s) => format!("\"{s}\""),
         };
-        write!(f, "{}", str)
+        write!(f, "{str}")
     }
 }
 
