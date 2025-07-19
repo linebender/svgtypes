@@ -64,7 +64,7 @@ impl Default for Length {
     }
 }
 
-impl std::str::FromStr for Length {
+impl core::str::FromStr for Length {
     type Err = Error;
 
     #[inline]
@@ -187,7 +187,8 @@ impl Iterator for LengthListParser<'_> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::str::FromStr;
+    use alloc::string::ToString;
+    use core::str::FromStr;
 
     macro_rules! test_p {
         ($name:ident, $text:expr, $result:expr) => (

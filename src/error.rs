@@ -1,6 +1,10 @@
 // Copyright 2018 the SVG Types Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+use alloc::string::String;
+use alloc::vec;
+use alloc::vec::Vec;
+
 /// List of all errors.
 #[derive(Debug, PartialEq, Eq)]
 pub enum Error {
@@ -46,8 +50,8 @@ pub enum Error {
     InvalidNumber(usize),
 }
 
-impl std::fmt::Display for Error {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for Error {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match *self {
             Self::UnexpectedEndOfStream => {
                 write!(f, "unexpected end of stream")
@@ -93,7 +97,7 @@ impl std::fmt::Display for Error {
     }
 }
 
-impl std::error::Error for Error {
+impl core::error::Error for Error {
     fn description(&self) -> &str {
         "an SVG data parsing error"
     }

@@ -1,7 +1,7 @@
 // Copyright 2018 the SVG Types Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use std::str::FromStr;
+use core::str::FromStr;
 
 use crate::{Color, Error, Stream};
 
@@ -119,6 +119,7 @@ impl<'a> Paint<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use alloc::string::ToString;
 
     macro_rules! test {
         ($name:ident, $text:expr, $result:expr) => (
