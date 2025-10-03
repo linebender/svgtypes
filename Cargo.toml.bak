@@ -18,4 +18,4 @@ members = ["benches"]
 
 [dependencies]
 siphasher = "1.0" # perfect hash implementation for color names
-kurbo = "0.12" # ArcTo to CurveTo(s)
+kurbo = "0.11" # ArcTo to CurveTo(s)
