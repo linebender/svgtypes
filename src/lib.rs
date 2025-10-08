@@ -84,6 +84,7 @@ mod points;
 mod stream;
 mod transform;
 mod transform_origin;
+mod variable;
 mod viewbox;
 
 use crate::stream::{ByteExt, Stream};
@@ -105,4 +106,5 @@ pub use crate::path::*;
 pub use crate::points::*;
 pub use crate::transform::*;
 pub use crate::transform_origin::*;
+pub use crate::variable::VariableFunction;
 pub use crate::viewbox::*;
