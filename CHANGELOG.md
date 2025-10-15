@@ -13,7 +13,11 @@ You can find its changes [documented below](#0153-2025-01-20).
 
 ## [Unreleased]
 
-This release has an [MSRV][] of 1.65.
+This release has an [MSRV][] of 1.82.
+
+### Changed
+
+- Update Kurbo to v0.12. ([#56][] by [@HaHa421][])
 
 ## [0.15.3][] (2025-01-20)
 
@@ -272,9 +276,11 @@ Many thanks to Yevhenii Reizner for the years of hard work that he has poured in
 [#40]: https://github.com/linebender/svgtypes/pull/40
 [#43]: https://github.com/linebender/svgtypes/pull/43
 [#44]: https://github.com/linebender/svgtypes/pull/44
+[#56]: https://github.com/linebender/svgtypes/pull/56
 
 [@demurgos]: https://github.com/demurgos
 [@erxclau]: https://github.com/erxclau
+[@HaHa421]: https://github.com/HaHa421
 [@Laurenzv]: https://github.com/LaurenzV
 [@romanzes]: https://github.com/romanzes
 [@tomcur]: https://github.com/tomcur
