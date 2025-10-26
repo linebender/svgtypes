@@ -19,6 +19,10 @@ This release has an [MSRV][] of 1.82.
 
 This release has an [MSRV][] of 1.82.
 
+### Added
+
+- Add helper functions to PathSegment ([#37][] by [@LaurenzV][])
+
 ### Changed
 
 - Update Kurbo to v0.12. ([#56][] by [@HaHa421][])
