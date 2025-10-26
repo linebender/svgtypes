@@ -42,7 +42,7 @@ impl Angle {
     }
 }
 
-impl std::str::FromStr for Angle {
+impl core::str::FromStr for Angle {
     type Err = Error;
 
     #[inline]
@@ -99,7 +99,8 @@ impl Stream<'_> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::str::FromStr;
+    use alloc::string::ToString;
+    use core::str::FromStr;
 
     macro_rules! test_p {
         ($name:ident, $text:expr, $result:expr) => (

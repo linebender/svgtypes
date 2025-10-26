@@ -199,7 +199,7 @@ pub fn from_str(text: &str) -> Option<Color> {
 //
 // https://github.com/sfackler/rust-phf
 
-use std::hash::Hasher;
+use core::hash::Hasher;
 
 pub struct Map<V: 'static> {
     pub key: u64,

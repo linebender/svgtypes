@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use crate::{Error, Length, LengthUnit, Stream};
+use alloc::string::ToString;
+use alloc::vec;
 
 /// List of all SVG directional positions.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -46,7 +48,7 @@ impl From<DirectionalPosition> for Length {
     }
 }
 
-impl std::str::FromStr for DirectionalPosition {
+impl core::str::FromStr for DirectionalPosition {
     type Err = Error;
 
     #[inline]
@@ -102,7 +104,7 @@ impl Stream<'_> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::str::FromStr;
+    use core::str::FromStr;
 
     macro_rules! test_p {
         ($name:ident, $text:expr, $result:expr) => (

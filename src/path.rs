@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use crate::{Error, Stream};
+use alloc::vec::Vec;
 
 /// Representation of a path segment.
 ///

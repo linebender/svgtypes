@@ -1,7 +1,7 @@
 // Copyright 2018 the SVG Types Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use std::str::FromStr;
+use core::str::FromStr;
 
 use crate::{ByteExt, Error, Stream};
 
@@ -9,7 +9,7 @@ use crate::{ByteExt, Error, Stream};
 #[derive(Clone, Copy, PartialEq, Debug)]
 pub struct Number(pub f64);
 
-impl std::str::FromStr for Number {
+impl core::str::FromStr for Number {
     type Err = Error;
 
     fn from_str(text: &str) -> Result<Self, Self::Err> {
@@ -165,6 +165,7 @@ impl Iterator for NumberListParser<'_> {
 #[rustfmt::skip]
 #[cfg(test)]
 mod tests {
+    use alloc::string::ToString;
     use crate::Stream;
 
     macro_rules! test_p {
