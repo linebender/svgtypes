@@ -69,11 +69,11 @@ impl core::str::FromStr for PaintOrder {
             s.skip_spaces();
             let name = match name {
                 // `normal` is the special value that should short-circuit.
-                "normal" => return Ok(PaintOrder::default()),
+                "normal" => return Ok(Self::default()),
                 "fill" => PaintOrderKind::Fill,
                 "stroke" => PaintOrderKind::Stroke,
                 "markers" => PaintOrderKind::Markers,
-                _ => return Ok(PaintOrder::default()),
+                _ => return Ok(Self::default()),
             };
 
             if let Some(index) = left.iter().position(|v| *v == name) {
@@ -86,11 +86,11 @@ impl core::str::FromStr for PaintOrder {
         s.skip_spaces();
         if !s.at_end() {
             // Any trailing data is an error.
-            return Ok(PaintOrder::default());
+            return Ok(Self::default());
         }
 
         if order.is_empty() {
-            return Ok(PaintOrder::default());
+            return Ok(Self::default());
         }
 
         // Any missing values should be added in the original order.
@@ -101,10 +101,10 @@ impl core::str::FromStr for PaintOrder {
         // Any duplicates is an error.
         if order[0] == order[1] || order[0] == order[2] || order[1] == order[2] {
             // Any trailing data is an error.
-            return Ok(PaintOrder::default());
+            return Ok(Self::default());
         }
 
-        Ok(PaintOrder {
+        Ok(Self {
             order: [order[0], order[1], order[2]],
         })
     }

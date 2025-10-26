@@ -26,8 +26,8 @@ pub struct Angle {
 impl Angle {
     /// Constructs a new angle.
     #[inline]
-    pub fn new(number: f64, unit: AngleUnit) -> Angle {
-        Angle { number, unit }
+    pub fn new(number: f64, unit: AngleUnit) -> Self {
+        Self { number, unit }
     }
 
     /// Converts angle to degrees.
@@ -54,7 +54,7 @@ impl core::str::FromStr for Angle {
             return Err(Error::UnexpectedData(s.calc_char_pos()));
         }
 
-        Ok(Angle::new(l.number, l.unit))
+        Ok(Self::new(l.number, l.unit))
     }
 }
 

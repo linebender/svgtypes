@@ -10,7 +10,7 @@ categories = ["parser-implementations"]
 readme = "README.md"
 # Keep in sync with RUST_MIN_VER in .github/workflows/ci.yml and with the relevant README.md files.
 # and with the MSRV in the `Unreleased` section of CHANGELOG.md.
-rust-version = "1.65"
+rust-version = "1.82"
 exclude = [".github", ".clippy.toml", ".gitignore", ".typos.toml", "benches/", "codegen/", "fuzz/"]
 
 [workspace]
@@ -23,4 +23,4 @@ libm = ["kurbo/libm"]
 
 [dependencies]
 siphasher = "1.0" # perfect hash implementation for color names
-kurbo = { version = "0.11", default-features = false } # ArcTo to CurveTo(s)
+kurbo = { version = "0.12", default-features = false } # ArcTo to CurveTo(s)

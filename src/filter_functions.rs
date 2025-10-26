@@ -69,34 +69,33 @@ pub enum FilterValueListParserError {
 
 impl From<Error> for FilterValueListParserError {
     fn from(e: Error) -> Self {
-        FilterValueListParserError::StreamErrors(e)
+        Self::StreamErrors(e)
     }
 }
 
 impl core::fmt::Display for FilterValueListParserError {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match *self {
-            FilterValueListParserError::PercentageValue(pos) => {
-                write!(f, "a percentage value detected at position {}", pos)
+            Self::PercentageValue(pos) => {
+                write!(f, "a percentage value detected at position {pos}")
             }
-            FilterValueListParserError::NegativeValue(pos) => {
-                write!(f, "a negative value detected at position {}", pos)
+            Self::NegativeValue(pos) => {
+                write!(f, "a negative value detected at position {pos}")
             }
-            FilterValueListParserError::InvalidAngle(pos) => {
-                write!(f, "an invalid angle at position {}", pos)
+            Self::InvalidAngle(pos) => {
+                write!(f, "an invalid angle at position {pos}")
             }
-            FilterValueListParserError::MissingDropShadowOffset(pos) => {
+            Self::MissingDropShadowOffset(pos) => {
                 write!(
                     f,
-                    "drop-shadow offset values are expected at position {}",
-                    pos
+                    "drop-shadow offset values are expected at position {pos}"
                 )
             }
-            FilterValueListParserError::InvalidUrl(pos) => {
-                write!(f, "an invalid url at position {}", pos)
+            Self::InvalidUrl(pos) => {
+                write!(f, "an invalid url at position {pos}")
             }
-            FilterValueListParserError::StreamErrors(ref e) => {
-                write!(f, "{}", e)
+            Self::StreamErrors(ref e) => {
+                write!(f, "{e}")
             }
         }
     }

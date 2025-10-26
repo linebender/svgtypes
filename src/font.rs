@@ -42,14 +42,14 @@ pub enum FontFamily {
 impl Display for FontFamily {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         let str = match self {
-            FontFamily::Monospace => "monospace".to_string(),
-            FontFamily::Serif => "serif".to_string(),
-            FontFamily::SansSerif => "sans-serif".to_string(),
-            FontFamily::Cursive => "cursive".to_string(),
-            FontFamily::Fantasy => "fantasy".to_string(),
-            FontFamily::Named(s) => format!("\"{}\"", s),
+            Self::Monospace => "monospace".to_string(),
+            Self::Serif => "serif".to_string(),
+            Self::SansSerif => "sans-serif".to_string(),
+            Self::Cursive => "cursive".to_string(),
+            Self::Fantasy => "fantasy".to_string(),
+            Self::Named(s) => format!("\"{s}\""),
         };
-        write!(f, "{}", str)
+        write!(f, "{str}")
     }
 }
 
@@ -164,7 +164,7 @@ impl<'a> FontShorthand<'a> {
                 | "700" | "800" | "900" => font_weight = Some(ident),
                 "ultra-condensed" | "extra-condensed" | "condensed" | "semi-condensed"
                 | "semi-expanded" | "expanded" | "extra-expanded" | "ultra-expanded" => {
-                    font_stretch = Some(ident)
+                    font_stretch = Some(ident);
                 }
                 _ => {
                     // Not one of the 4 properties, so we backtrack and then start

@@ -16,10 +16,10 @@ pub enum ViewBoxError {
 impl core::fmt::Display for ViewBoxError {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match *self {
-            ViewBoxError::InvalidNumber => {
+            Self::InvalidNumber => {
                 write!(f, "viewBox contains an invalid number")
             }
-            ViewBoxError::InvalidSize => {
+            Self::InvalidSize => {
                 write!(f, "viewBox has a negative or zero size")
             }
         }
@@ -47,7 +47,7 @@ pub struct ViewBox {
 impl ViewBox {
     /// Creates a new `ViewBox`.
     pub fn new(x: f64, y: f64, w: f64, h: f64) -> Self {
-        ViewBox { x, y, w, h }
+        Self { x, y, w, h }
     }
 }
 
@@ -74,7 +74,7 @@ impl core::str::FromStr for ViewBox {
             return Err(ViewBoxError::InvalidSize);
         }
 
-        Ok(ViewBox::new(x, y, w, h))
+        Ok(Self::new(x, y, w, h))
     }
 }
 
