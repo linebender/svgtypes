@@ -8,12 +8,20 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 -->
 
-The latest published SVG Types release is [0.15.3](#0153-2025-01-20) which was released on 2025-01-20.
-You can find its changes [documented below](#0153-2025-01-20).
+The latest published SVG Types release is [0.16.0](#0160-2025-10-26) which was released on 2025-10-26.
+You can find its changes [documented below](#0160-2025-10-26).
 
 ## [Unreleased]
 
 This release has an [MSRV][] of 1.82.
+
+## [0.16.0][] (2025-10-26)
+
+This release has an [MSRV][] of 1.82.
+
+### Added
+
+- Add helper functions to PathSegment ([#37][] by [@LaurenzV][])
 
 ### Changed
 
