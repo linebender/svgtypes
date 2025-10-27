@@ -175,6 +175,31 @@ impl<'a> Stream<'a> {
         self.text[self.pos..].chars()
     }
 
+    /// Returns a zero-length string at current position.
+    pub fn curr_empty(&self) -> &'a str {
+        &self.text[self.pos..self.pos]
+    }
+
+    /// Returns a string that starts at given `start` position and ends at
+    /// current position.
+    /// 
+    /// # Panics
+    /// 
+    /// This function will panic if provided `start` string is not found in this
+    /// stream.
+    pub fn terminate_start(&self, start: &'a str) -> &'a str {
+        let start_pos = start.as_bytes().as_ptr_range().start;
+        if !self.text.as_bytes().as_ptr_range().contains(&start_pos) {
+            panic!("tried terminating a string that doesn't belong to this stream")
+        }
+        let start_offset = {
+            // SAFETY: Checked whether self.text contains start_pos above, so
+            // it's larger or equal to first byte in the stream.
+            start_pos as usize - self.text.as_bytes().as_ptr_range().start as usize
+        };
+        &self.text[start_offset..self.pos]
+    }
+
     /// Returns a byte from a current stream position.
     ///
     /// # Panics
