@@ -338,11 +338,7 @@ fn next_impl(s: &mut Stream<'_>, prev_cmd: &mut Option<u8>) -> Result<PathSegmen
     };
 
     *prev_cmd = Some(if is_implicit_move_to {
-        if absolute {
-            b'M'
-        } else {
-            b'm'
-        }
+        if absolute { b'M' } else { b'm' }
     } else {
         cmd
     });

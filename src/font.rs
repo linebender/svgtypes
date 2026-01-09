@@ -1,8 +1,8 @@
 // Copyright 2024 the SVG Types Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use crate::stream::{ByteExt, Stream};
 use crate::Error;
+use crate::stream::{ByteExt, Stream};
 use alloc::format;
 use alloc::string::{String, ToString};
 use alloc::vec;
