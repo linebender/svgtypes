@@ -1,7 +1,7 @@
 // Copyright 2021 the SVG Types Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use crate::{colors, ByteExt, Error, Stream};
+use crate::{ByteExt, Error, Stream, colors};
 
 #[cfg(not(feature = "std"))]
 use kurbo::common::FloatFuncs;
