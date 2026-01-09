@@ -2,7 +2,7 @@
 name = "svgtypes"
 version = "0.16.1"
 license = "Apache-2.0 OR MIT"
-edition = "2021"
+edition = "2024"
 description = "SVG types parser."
 repository = "https://github.com/linebender/svgtypes"
 keywords = ["svg", "parser", "tokenizer"]
