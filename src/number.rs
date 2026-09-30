@@ -70,7 +70,11 @@ impl Stream<'_> {
         // Consume fraction.
         if let Ok(b'.') = self.curr_byte() {
             self.advance(1);
+            let fraction_start = self.pos();
             self.skip_digits();
+            if self.pos() == fraction_start {
+                return Err(Error::InvalidNumber(0));
+            }
         }
 
         if let Ok(c) = self.curr_byte() {
@@ -199,7 +203,7 @@ mod tests {
     test_p!(parse_19, "1ex", 1.0);
     test_p!(parse_20, "1em", 1.0);
     test_p!(parse_21, "12345678901234567890", 12345678901234567000.0);
-    test_p!(parse_22, "0.", 0.0);
+    test_p!(parse_22, "0.0", 0.0);
     test_p!(parse_23, "1.3e-2", 0.013);
     // test_number!(parse_24, "1e", 1.0); // TODO: this
 
@@ -222,4 +226,5 @@ mod tests {
     test_p_err!(parse_err_6, ".");
     test_p_err!(parse_err_7, "99999999e99999999");
     test_p_err!(parse_err_8, "-99999999e99999999");
+    test_p_err!(parse_err_9, "0.");
 }
