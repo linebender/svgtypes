@@ -15,6 +15,11 @@ You can find its changes [documented below](#0161-2026-01-09).
 
 This release has an [MSRV][] of 1.85.
 
+### Changed
+
+- Require at least one fractional digit after a decimal point in the shared number parser.
+  Previously accepted inputs such as `0.`, `23.e2`, `23.px`, and `23.deg` are now rejected. ([#66][] by [@ldm0][])
+
 ## [0.16.1][] (2026-01-09)
 
 This release has an [MSRV][] of 1.85.
