@@ -109,3 +109,6 @@ pub use crate::points::*;
 pub use crate::transform::*;
 pub use crate::transform_origin::*;
 pub use crate::viewbox::*;
+
+// re-export
+pub use kurbo;
