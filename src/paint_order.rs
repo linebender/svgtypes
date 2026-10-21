@@ -2,8 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use crate::stream::Stream;
-use alloc::vec;
-use alloc::vec::Vec;
 
 /// [`paint-order`] property variants.
 ///
@@ -54,16 +52,11 @@ impl core::str::FromStr for PaintOrder {
     ///
     /// Never returns an error and fallbacks to the default value instead.
     fn from_str(text: &str) -> Result<Self, Self::Err> {
-        let mut order = Vec::new();
-
-        let mut left = vec![
-            PaintOrderKind::Fill,
-            PaintOrderKind::Stroke,
-            PaintOrderKind::Markers,
-        ];
+        let mut order = Self::default().order;
 
         let mut s = Stream::from(text);
-        while !s.at_end() && order.len() < 3 {
+        let mut count = 0;
+        while !s.at_end() && count < 3 {
             s.skip_spaces();
             let name = s.consume_ascii_ident();
             s.skip_spaces();
@@ -76,30 +69,18 @@ impl core::str::FromStr for PaintOrder {
                 _ => return Ok(Self::default()),
             };
 
-            if let Some(index) = left.iter().position(|v| *v == name) {
-                left.remove(index);
+            if let Some(index) = order.iter().position(|v| *v == name) {
+                if count <= index {
+                    order[count..=index].rotate_right(1);
+                    count += 1;
+                } else {
+                    order = Self::default().order;
+                }
             }
-
-            order.push(name);
         }
 
         s.skip_spaces();
         if !s.at_end() {
-            // Any trailing data is an error.
-            return Ok(Self::default());
-        }
-
-        if order.is_empty() {
-            return Ok(Self::default());
-        }
-
-        // Any missing values should be added in the original order.
-        while order.len() < 3 && !left.is_empty() {
-            order.push(left.remove(0));
-        }
-
-        // Any duplicates is an error.
-        if order[0] == order[1] || order[0] == order[2] || order[1] == order[2] {
             // Any trailing data is an error.
             return Ok(Self::default());
         }
