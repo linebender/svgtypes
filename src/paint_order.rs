@@ -14,17 +14,6 @@ pub enum PaintOrderKind {
     Markers,
 }
 
-impl PaintOrderKind {
-    /// get str repr
-    pub fn as_str(self) -> &'static str {
-        match self {
-            Self::Fill => "fill",
-            Self::Stroke => "stroke",
-            Self::Markers => "markers",
-        }
-    }
-}
-
 /// Representation of the [`paint-order`] property.
 ///
 /// [`paint-order`]: https://www.w3.org/TR/SVG2/painting.html#PaintOrder
@@ -175,27 +164,37 @@ mod tests {
 
     #[test]
     fn test_all_paint_order_combinations() {
-        let combinations = [
-            [PaintOrderKind::Fill, PaintOrderKind::Stroke, PaintOrderKind::Markers],
-            [PaintOrderKind::Fill, PaintOrderKind::Markers, PaintOrderKind::Stroke],
-            [PaintOrderKind::Stroke, PaintOrderKind::Fill, PaintOrderKind::Markers],
-            [PaintOrderKind::Stroke, PaintOrderKind::Markers, PaintOrderKind::Fill],
-            [PaintOrderKind::Markers, PaintOrderKind::Fill, PaintOrderKind::Stroke],
-            [PaintOrderKind::Markers, PaintOrderKind::Stroke, PaintOrderKind::Fill],
+        let tests_combinations = [
+            (
+                "fill stroke markers",
+                [PaintOrderKind::Fill, PaintOrderKind::Stroke, PaintOrderKind::Markers],
+            ),
+            (
+                "fill markers stroke",
+                [PaintOrderKind::Fill, PaintOrderKind::Markers, PaintOrderKind::Stroke],
+            ),
+            (
+                "stroke fill markers",
+                [PaintOrderKind::Stroke, PaintOrderKind::Fill, PaintOrderKind::Markers],
+            ),
+            (
+                "stroke markers fill",
+                [PaintOrderKind::Stroke, PaintOrderKind::Markers, PaintOrderKind::Fill],
+            ),
+            (
+                "markers fill stroke",
+                [PaintOrderKind::Markers, PaintOrderKind::Fill, PaintOrderKind::Stroke],
+            ),
+            (
+                "markers stroke fill",
+                [PaintOrderKind::Markers, PaintOrderKind::Stroke, PaintOrderKind::Fill],
+            )
         ];
 
-        let expected = [
-            ["fill", "stroke", "markers"],
-            ["fill", "markers", "stroke"],
-            ["stroke", "fill", "markers"],
-            ["stroke", "markers", "fill"],
-            ["markers", "fill", "stroke"],
-            ["markers", "stroke", "fill"],
-        ];
-
-        for (combination, expected_order) in combinations.iter().zip(expected.iter()) {
-            let actual = combination.map(|kind| kind.as_str());
-            assert_eq!(&actual, expected_order);
+        for (str_combination, expected_order) in tests_combinations {
+            let actual = PaintOrder::from_str(str_combination).unwrap();
+            let expected = PaintOrder::from(expected_order);
+            assert_eq!(actual, expected);
         }
     }
 }
