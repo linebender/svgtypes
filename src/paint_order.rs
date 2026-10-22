@@ -86,7 +86,7 @@ impl core::str::FromStr for PaintOrder {
         }
 
         Ok(Self {
-            order: [order[0], order[1], order[2]],
+            order,
         })
     }
 }
