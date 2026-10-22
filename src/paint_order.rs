@@ -85,9 +85,7 @@ impl core::str::FromStr for PaintOrder {
             return Ok(Self::default());
         }
 
-        Ok(Self {
-            order,
-        })
+        Ok(Self { order })
     }
 }
 
