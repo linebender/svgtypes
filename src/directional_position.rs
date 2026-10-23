@@ -1,7 +1,8 @@
 // Copyright 2023 the SVG Types Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use crate::{invalid_string_choices, Error, Length, LengthUnit, Stream};
+use crate::invalid_string_choices;
+use crate::{Error, Length, LengthUnit, Stream};
 use alloc::string::ToString;
 
 /// List of all SVG directional positions.
