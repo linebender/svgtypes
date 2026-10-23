@@ -3,7 +3,6 @@
 
 use crate::Error;
 use alloc::borrow::ToOwned;
-use alloc::vec;
 
 /// Extension methods for XML-subset only operations.
 pub(crate) trait ByteExt {
@@ -244,7 +243,7 @@ impl<'a> Stream<'a> {
     pub fn consume_byte(&mut self, c: u8) -> Result<(), Error> {
         if self.curr_byte()? != c {
             return Err(Error::InvalidChar(
-                vec![self.curr_byte_unchecked(), c],
+                [self.curr_byte_unchecked(), c],
                 self.calc_char_pos(),
             ));
         }
@@ -361,7 +360,7 @@ impl<'a> Stream<'a> {
             let expected = core::str::from_utf8(text).unwrap().to_owned();
 
             return Err(Error::InvalidString(
-                vec![actual, expected],
+                [actual, expected],
                 self.calc_char_pos(),
             ));
         }

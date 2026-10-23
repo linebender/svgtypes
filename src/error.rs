@@ -2,8 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use alloc::string::String;
-use alloc::vec;
-use alloc::vec::Vec;
 
 /// List of all errors.
 #[derive(Debug, PartialEq, Eq)]
@@ -37,18 +35,26 @@ pub enum Error {
     /// The first byte is an actual one, others - expected.
     ///
     /// We are using a single value to reduce the struct size.
-    InvalidChar(Vec<u8>, usize),
+    InvalidChar([u8; 2], usize),
 
     /// An unexpected character instead of an XML space.
     ///
     /// The first string is an actual one, others - expected.
     ///
     /// We are using a single value to reduce the struct size.
-    InvalidString(Vec<String>, usize),
+    InvalidString([String; 2], usize),
 
     /// An invalid number.
     InvalidNumber(usize),
 }
+
+macro_rules! invalid_string_choices {
+    ($($s:expr),* $(,)?) => {
+        [$($s),*].join("', '")
+    };
+}
+
+pub(crate) use invalid_string_choices;
 
 impl core::fmt::Display for Error {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -66,28 +72,17 @@ impl core::fmt::Display for Error {
                 write!(f, "invalid ident")
             }
             Self::InvalidChar(ref chars, pos) => {
-                // Vec<u8> -> Vec<String>
-                let list: Vec<String> = chars
-                    .iter()
-                    .skip(1)
-                    .map(|c| String::from_utf8(vec![*c]).unwrap())
-                    .collect();
-
                 write!(
                     f,
                     "expected '{}' not '{}' at position {}",
-                    list.join("', '"),
-                    chars[0] as char,
-                    pos
+                    chars[1] as char, chars[0] as char, pos
                 )
             }
             Self::InvalidString(ref strings, pos) => {
                 write!(
                     f,
                     "expected '{}' not '{}' at position {}",
-                    strings[1..].join("', '"),
-                    strings[0],
-                    pos
+                    strings[1], strings[0], pos
                 )
             }
             Self::InvalidNumber(pos) => {

@@ -1,9 +1,8 @@
 // Copyright 2023 the SVG Types Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use crate::{Error, Length, LengthUnit, Stream};
+use crate::{invalid_string_choices, Error, Length, LengthUnit, Stream};
 use alloc::string::ToString;
-use alloc::vec;
 
 /// List of all SVG directional positions.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -86,13 +85,9 @@ impl Stream<'_> {
             Ok(DirectionalPosition::Center)
         } else {
             Err(Error::InvalidString(
-                vec![
+                [
                     self.slice_tail().to_string(),
-                    "left".to_string(),
-                    "right".to_string(),
-                    "top".to_string(),
-                    "bottom".to_string(),
-                    "center".to_string(),
+                    invalid_string_choices!("left", "right", "top", "bottom", "center"),
                 ],
                 self.calc_char_pos(),
             ))
