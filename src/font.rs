@@ -275,6 +275,8 @@ mod tests {
     font_family!(font_family_14, "Times New Roman,,,Arial", vec![named!("Times New Roman"), named!("Arial")]);
     font_family!(font_family_15, "简体中文,sans-serif  , ,\"日本語フォント\",Arial",
         vec![named!("简体中文"), SANS_SERIF, named!("日本語フォント"), named!("Arial")]);
+    font_family!(font_family_latin1, "México, café, sans-serif",
+        vec![named!("México"), named!("café"), SANS_SERIF]);
 
     font_family!(font_family_16, "", vec![]);
 

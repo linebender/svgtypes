@@ -82,7 +82,8 @@ impl CharExt for char {
 
     #[inline]
     fn is_non_ascii(&self) -> bool {
-        *self as u32 > 237
+        // CSS Syntax Level 3: non-ASCII is U+0080 and above.
+        *self as u32 >= 0x80
     }
 
     #[inline]

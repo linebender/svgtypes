@@ -15,6 +15,10 @@ You can find its changes [documented below](#0161-2026-01-09).
 
 This release has an [MSRV][] of 1.85.
 
+### Fixed
+
+- Treat CSS ident non-ASCII as U+0080 and above so Latin-1 font-family names parse.
+
 ## [0.16.1][] (2026-01-09)
 
 This release has an [MSRV][] of 1.85.
