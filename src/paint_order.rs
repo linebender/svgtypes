@@ -2,8 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use crate::stream::Stream;
-use alloc::vec;
-use alloc::vec::Vec;
 
 /// [`paint-order`] property variants.
 ///
@@ -54,16 +52,11 @@ impl core::str::FromStr for PaintOrder {
     ///
     /// Never returns an error and fallbacks to the default value instead.
     fn from_str(text: &str) -> Result<Self, Self::Err> {
-        let mut order = Vec::new();
-
-        let mut left = vec![
-            PaintOrderKind::Fill,
-            PaintOrderKind::Stroke,
-            PaintOrderKind::Markers,
-        ];
+        let mut order = Self::default().order;
 
         let mut s = Stream::from(text);
-        while !s.at_end() && order.len() < 3 {
+        let mut count = 0;
+        while !s.at_end() && count < 3 {
             s.skip_spaces();
             let name = s.consume_ascii_ident();
             s.skip_spaces();
@@ -76,11 +69,11 @@ impl core::str::FromStr for PaintOrder {
                 _ => return Ok(Self::default()),
             };
 
-            if let Some(index) = left.iter().position(|v| *v == name) {
-                left.remove(index);
-            }
-
-            order.push(name);
+            let Some(index) = order[count..].iter().position(|v| *v == name) else {
+                return Ok(Self::default());
+            };
+            order[count..=count + index].rotate_right(1);
+            count += 1;
         }
 
         s.skip_spaces();
@@ -89,24 +82,7 @@ impl core::str::FromStr for PaintOrder {
             return Ok(Self::default());
         }
 
-        if order.is_empty() {
-            return Ok(Self::default());
-        }
-
-        // Any missing values should be added in the original order.
-        while order.len() < 3 && !left.is_empty() {
-            order.push(left.remove(0));
-        }
-
-        // Any duplicates is an error.
-        if order[0] == order[1] || order[0] == order[2] || order[1] == order[2] {
-            // Any trailing data is an error.
-            return Ok(Self::default());
-        }
-
-        Ok(Self {
-            order: [order[0], order[1], order[2]],
-        })
+        Ok(Self { order })
     }
 }
 
@@ -179,5 +155,46 @@ mod tests {
     #[test]
     fn parse_11() {
         assert_eq!(PaintOrder::from_str("stroke stroke stroke stroke").unwrap(), PaintOrder::default());
+    }
+
+    #[test]
+    fn parse_12() {
+        assert_eq!(PaintOrder::from_str("stroke stroke markers").unwrap(), PaintOrder::default());
+    }
+
+    #[test]
+    fn test_all_paint_order_combinations() {
+        let tests_combinations = [
+            (
+                "fill stroke markers",
+                [PaintOrderKind::Fill, PaintOrderKind::Stroke, PaintOrderKind::Markers],
+            ),
+            (
+                "fill markers stroke",
+                [PaintOrderKind::Fill, PaintOrderKind::Markers, PaintOrderKind::Stroke],
+            ),
+            (
+                "stroke fill markers",
+                [PaintOrderKind::Stroke, PaintOrderKind::Fill, PaintOrderKind::Markers],
+            ),
+            (
+                "stroke markers fill",
+                [PaintOrderKind::Stroke, PaintOrderKind::Markers, PaintOrderKind::Fill],
+            ),
+            (
+                "markers fill stroke",
+                [PaintOrderKind::Markers, PaintOrderKind::Fill, PaintOrderKind::Stroke],
+            ),
+            (
+                "markers stroke fill",
+                [PaintOrderKind::Markers, PaintOrderKind::Stroke, PaintOrderKind::Fill],
+            )
+        ];
+
+        for (str_combination, expected_order) in tests_combinations {
+            let actual = PaintOrder::from_str(str_combination).unwrap();
+            let expected = PaintOrder::from(expected_order);
+            assert_eq!(actual, expected);
+        }
     }
 }
