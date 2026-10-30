@@ -74,7 +74,9 @@ impl core::str::FromStr for PaintOrder {
                     order[count..=index].rotate_right(1);
                     count += 1;
                 } else {
-                    order = Self::default().order;
+                    return Ok(Self {
+                        order: Self::default().order,
+                    });
                 }
             }
         }
@@ -158,6 +160,11 @@ mod tests {
     #[test]
     fn parse_11() {
         assert_eq!(PaintOrder::from_str("stroke stroke stroke stroke").unwrap(), PaintOrder::default());
+    }
+
+    #[test]
+    fn parse_12() {
+        assert_eq!(PaintOrder::from_str("stroke stroke markers").unwrap(), PaintOrder::default());
     }
 
     #[test]
