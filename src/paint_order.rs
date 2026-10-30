@@ -69,16 +69,11 @@ impl core::str::FromStr for PaintOrder {
                 _ => return Ok(Self::default()),
             };
 
-            if let Some(index) = order.iter().position(|v| *v == name) {
-                if count <= index {
-                    order[count..=index].rotate_right(1);
-                    count += 1;
-                } else {
-                    return Ok(Self {
-                        order: Self::default().order,
-                    });
-                }
-            }
+            let Some(index) = order[count..].iter().position(|v| *v == name) else {
+                return Ok(Self::default());
+            };
+            order[count..=count + index].rotate_right(1);
+            count += 1;
         }
 
         s.skip_spaces();
