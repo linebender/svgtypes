@@ -8,20 +8,27 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 -->
 
-The latest published SVG Types release is [0.16.1](#0160-2026-01-09) which was released on 2026-01-09.
-You can find its changes [documented below](#0161-2026-01-09).
+The latest published SVG Types release is [0.16.2](#0162-2026-10-31) which was released on 2026-10-31.
+You can find its changes [documented below](#0162-2026-10-31).
 
 ## [Unreleased]
+
+This release has an [MSRV][] of 1.85.
+
+## [0.16.2][] (2026-10-31)
 
 This release has an [MSRV][] of 1.85.
 
 ### Added
 
 - Support `hwb()` colors. ([#63][] by [@simartin][])
+- Support angle units for the hue in `hsl()` and `hsla()`. ([#62][] by [@simartin][])
+- Support the `/` separator before the alpha component in `rgb()`, `hsl()` and friends. ([#64][] by [@simartin][])
 
 ### Fixed
 
 - Accept all non-ASCII ident code points in CSS identifiers, so unquoted font-family names such as `café` parse. ([#71][] by [@mamicicekel][])
+- Return an error instead of panicking on invalid `transform-origin` values. ([#65][] by [@ChrisJr404][])
 
 ## [0.16.1][] (2026-01-09)
 
@@ -301,9 +308,13 @@ Many thanks to Yevhenii Reizner for the years of hard work that he has poured in
 [#43]: https://github.com/linebender/svgtypes/pull/43
 [#44]: https://github.com/linebender/svgtypes/pull/44
 [#56]: https://github.com/linebender/svgtypes/pull/56
+[#62]: https://github.com/linebender/svgtypes/pull/62
 [#63]: https://github.com/linebender/svgtypes/pull/63
+[#64]: https://github.com/linebender/svgtypes/pull/64
+[#65]: https://github.com/linebender/svgtypes/pull/65
 [#71]: https://github.com/linebender/svgtypes/pull/71
 
+[@ChrisJr404]: https://github.com/ChrisJr404
 [@demurgos]: https://github.com/demurgos
 [@erxclau]: https://github.com/erxclau
 [@HaHa421]: https://github.com/HaHa421
@@ -315,7 +326,8 @@ Many thanks to Yevhenii Reizner for the years of hard work that he has poured in
 [@waywardmonkeys]: https://github.com/waywardmonkeys
 [@yisibl]: https://github.com/yisibl
 
-[Unreleased]: https://github.com/RazrFalcon/svgtypes/compare/v0.16.1...HEAD
+[Unreleased]: https://github.com/RazrFalcon/svgtypes/compare/v0.16.2...HEAD
+[0.16.2]: https://github.com/RazrFalcon/svgtypes/compare/v0.16.1...v0.16.2
 [0.16.1]: https://github.com/RazrFalcon/svgtypes/compare/v0.16.0...v0.16.1
 [0.16.0]: https://github.com/RazrFalcon/svgtypes/compare/v0.15.3...v0.16.0
 [0.15.3]: https://github.com/RazrFalcon/svgtypes/compare/v0.15.2...v0.15.3
