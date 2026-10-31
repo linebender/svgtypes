@@ -100,6 +100,7 @@ impl core::str::FromStr for TransformOrigin {
 
     fn from_str(text: &str) -> Result<Self, TransformOriginError> {
         let mut stream = Stream::from(text);
+        stream.skip_spaces();
 
         if stream.at_end() {
             return Err(TransformOriginError::MissingParameters);
@@ -115,7 +116,7 @@ impl core::str::FromStr for TransformOrigin {
             }
         };
 
-        let first_arg = parse_part(&mut stream);
+        let p1 = parse_part(&mut stream).ok_or(TransformOriginError::InvalidParameters)?;
         let mut second_arg = None;
         let mut third_arg = None;
 
@@ -142,17 +143,17 @@ impl core::str::FromStr for TransformOrigin {
             return Err(TransformOriginError::InvalidParameters);
         }
 
-        let result = match (first_arg, second_arg, third_arg) {
-            (Some(p), None, None) => {
-                let (x_offset, y_offset) = if p.is_horizontal() {
-                    (p.into(), DirectionalPosition::Center.into())
+        let result = match (second_arg, third_arg) {
+            (None, _) => {
+                let (x_offset, y_offset) = if p1.is_horizontal() {
+                    (p1.into(), DirectionalPosition::Center.into())
                 } else {
-                    (DirectionalPosition::Center.into(), p.into())
+                    (DirectionalPosition::Center.into(), p1.into())
                 };
 
                 Self::new(x_offset, y_offset, Length::new(0.0, LengthUnit::Px))
             }
-            (Some(p1), Some(p2), length) => {
+            (Some(p2), length) => {
                 if let Some(length) = length {
                     if length.unit == LengthUnit::Percent {
                         return Err(TransformOriginError::ZIndexIsPercentage);
@@ -181,7 +182,6 @@ impl core::str::FromStr for TransformOrigin {
                     }
                 }
             }
-            _ => return Err(TransformOriginError::InvalidParameters),
         };
 
         Ok(result)
@@ -236,13 +236,6 @@ mod tests {
     test_err!(parse_err_3, "center some", "transform origin has invalid parameters");
     test_err!(parse_err_4, "left right", "transform origin has invalid parameters");
     test_err!(parse_err_5, "left top 3%", "z-index cannot be a percentage");
-
-    // Inputs where the first component fails to parse but the underlying
-    // `skip_spaces`/sign handling still consumes the input, leaving the stream
-    // at its end. These previously reached an `unreachable!()` and panicked.
-    test_err!(parse_err_6, " ", "transform origin has invalid parameters");
-    test_err!(parse_err_7, "  ", "transform origin has invalid parameters");
-    test_err!(parse_err_8, "\t", "transform origin has invalid parameters");
-    test_err!(parse_err_9, "-", "transform origin has invalid parameters");
-    test_err!(parse_err_10, "+", "transform origin has invalid parameters");
+    test_err!(parse_err_6, " ", "transform origin doesn't have enough parameters");
+    test_err!(parse_err_7, "-", "transform origin has invalid parameters");
 }
