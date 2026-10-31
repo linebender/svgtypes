@@ -217,7 +217,7 @@ impl Stream<'_> {
 
                 self.skip_spaces();
                 self.consume_byte(b')')?;
-            } else if name == "hsl" || name == "hsla" || name == "hwb" {
+            } else if name == "hsl" || name == "hsla" {
                 self.consume_byte(b'(')?;
 
                 let mut hue = self.parse_list_angle()?.to_degrees();
@@ -226,11 +226,7 @@ impl Stream<'_> {
                 let saturation = f64_bound(0.0, self.parse_list_number_or_percent()?, 1.0);
                 let lightness = f64_bound(0.0, self.parse_list_number_or_percent()?, 1.0);
 
-                if name != "hwb" {
-                    color = hsl_to_rgb(hue as f32 / 60.0, saturation as f32, lightness as f32);
-                } else {
-                    color = hwb_to_rgb(hue as f32 / 60.0, saturation as f32, lightness as f32);
-                }
+                color = hsl_to_rgb(hue as f32 / 60.0, saturation as f32, lightness as f32);
 
                 self.skip_spaces();
                 if !self.starts_with(b")") {
@@ -239,6 +235,25 @@ impl Stream<'_> {
                         self.skip_spaces();
                     }
                     color.alpha = (self.parse_list_number_or_percent()? * 255.0).round() as u8;
+                }
+
+                self.skip_spaces();
+                self.consume_byte(b')')?;
+            } else if name == "hwb" {
+                self.consume_byte(b'(')?;
+
+                let mut hue = self.parse_angle()?.to_degrees();
+                hue = ((hue % 360.0) + 360.0) % 360.0;
+
+                let white = f64_bound(0.0, self.parse_hwb_component()?, 1.0);
+                let black = f64_bound(0.0, self.parse_hwb_component()?, 1.0);
+
+                color = hwb_to_rgb(hue as f32 / 60.0, white as f32, black as f32);
+
+                self.skip_spaces();
+                if self.is_curr_byte_eq(b'/') {
+                    self.advance(1);
+                    color.alpha = (self.parse_number_or_percent()? * 255.0).round() as u8;
                 }
 
                 self.skip_spaces();
@@ -256,6 +271,14 @@ impl Stream<'_> {
         }
 
         Ok(color)
+    }
+
+    fn parse_hwb_component(&mut self) -> Result<f64, Error> {
+        let n = self.parse_number()?;
+        if self.starts_with(b"%") {
+            self.advance(1);
+        }
+        Ok(n / 100.0)
     }
 }
 
@@ -664,22 +687,22 @@ mod tests {
     // Examples from https://www.w3.org/TR/css-color-4/#the-hwb-notation
     test!(
         hwb_doc_example_22,
-        "hwb(150, 20%, 10%)",
+        "hwb(150 20% 10%)",
         Color::new_rgba(51, 230, 140, 255)
     );
     test!(
         hwb_doc_example_22_alpha,
-        "hwb(150, 20%, 10%, 0.2)",
+        "hwb(150 20% 10% / 0.2)",
         Color::new_rgba(51, 230, 140, 51)
     );
     test!(
         hwb_doc_example_23,
-        "hwb(45, 40%, 80%)",
+        "hwb(45 40% 80%)",
         Color::new_rgba(85, 85, 85, 255)
     );
     test!(
         hwb_doc_example_23_alpha,
-        "hwb(45, 40%, 80%, 0.9)",
+        "hwb(45 40% 80% / 0.9)",
         Color::new_rgba(85, 85, 85, 230)
     );
 
@@ -687,13 +710,19 @@ mod tests {
     // https://www.w3schools.com/colors/colors_hwb.asp
     test!(
         hwb_generated_1,
-        "hwb(360, 82%, 2%)",
+        "hwb(360 82% 2%)",
         Color::new_rgba(250, 209, 209, 255)
     );
     test!(
         hwb_generated_2,
-        "hwb(74, 9%, 13%)",
+        "hwb(74 9% 13%)",
         Color::new_rgba(175, 222, 23, 255)
+    );
+
+    test!(
+        hwb_with_numbers,
+        "hwb(150 20 10)",
+        Color::new_rgba(51, 230, 140, 255)
     );
 
     macro_rules! test_err {
@@ -745,5 +774,11 @@ mod tests {
         rgb_mixed_units,
         "rgb(140%, -10mm, 130pt)",
         "invalid number at position 14"
+    );
+
+    test_err!(
+        hwb_with_commas,
+        "hwb(150, 20%, 10%)",
+        "invalid number at position 8"
     );
 }
