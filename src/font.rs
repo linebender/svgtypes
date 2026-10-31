@@ -277,6 +277,8 @@ mod tests {
         vec![named!("简体中文"), SANS_SERIF, named!("日本語フォント"), named!("Arial")]);
 
     font_family!(font_family_16, "", vec![]);
+    font_family!(font_family_17, "México, café, sans-serif",
+        vec![named!("México"), named!("café"), SANS_SERIF]);
 
     macro_rules! font_family_err {
         ($name:ident, $text:expr, $result:expr) => (
@@ -292,6 +294,7 @@ mod tests {
     font_family_err!(font_family_err_4, "test@foo, sans-serif", "invalid ident");
     font_family_err!(font_family_err_5, "#POUND, sans-serif", "invalid ident");
     font_family_err!(font_family_err_6, "Hawaii 5-0, sans-serif", "invalid ident");
+    font_family_err!(font_family_err_7, "Arial×Bold, sans-serif", "invalid ident");
 
     impl<'a> FontShorthand<'a> {
         fn new(font_style: Option<&'a str>, font_variant: Option<&'a str>, font_weight: Option<&'a str>,

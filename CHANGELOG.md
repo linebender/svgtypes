@@ -15,6 +15,10 @@ You can find its changes [documented below](#0161-2026-01-09).
 
 This release has an [MSRV][] of 1.85.
 
+### Fixed
+
+- Accept all non-ASCII ident code points in CSS identifiers, so unquoted font-family names such as `café` parse. ([#71][] by [@mamicicekel][])
+
 ## [0.16.1][] (2026-01-09)
 
 This release has an [MSRV][] of 1.85.
@@ -293,11 +297,13 @@ Many thanks to Yevhenii Reizner for the years of hard work that he has poured in
 [#43]: https://github.com/linebender/svgtypes/pull/43
 [#44]: https://github.com/linebender/svgtypes/pull/44
 [#56]: https://github.com/linebender/svgtypes/pull/56
+[#71]: https://github.com/linebender/svgtypes/pull/71
 
 [@demurgos]: https://github.com/demurgos
 [@erxclau]: https://github.com/erxclau
 [@HaHa421]: https://github.com/HaHa421
 [@Laurenzv]: https://github.com/LaurenzV
+[@mamicicekel]: https://github.com/mamicicekel
 [@romanzes]: https://github.com/romanzes
 [@tomcur]: https://github.com/tomcur
 [@waywardmonkeys]: https://github.com/waywardmonkeys

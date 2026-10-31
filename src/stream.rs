@@ -59,7 +59,7 @@ impl ByteExt for u8 {
 trait CharExt {
     fn is_name_start(&self) -> bool;
     fn is_name_char(&self) -> bool;
-    fn is_non_ascii(&self) -> bool;
+    fn is_non_ascii_ident(&self) -> bool;
     fn is_escape(&self) -> bool;
 }
 
@@ -68,7 +68,7 @@ impl CharExt for char {
     fn is_name_start(&self) -> bool {
         match *self {
             '_' | 'a'..='z' | 'A'..='Z' => true,
-            _ => self.is_non_ascii() || self.is_escape(),
+            _ => self.is_non_ascii_ident() || self.is_escape(),
         }
     }
 
@@ -76,13 +76,31 @@ impl CharExt for char {
     fn is_name_char(&self) -> bool {
         match *self {
             '_' | 'a'..='z' | 'A'..='Z' | '0'..='9' | '-' => true,
-            _ => self.is_non_ascii() || self.is_escape(),
+            _ => self.is_non_ascii_ident() || self.is_escape(),
         }
     }
 
+    /// <https://www.w3.org/TR/css-syntax-3/#non-ascii-ident-code-point>
     #[inline]
-    fn is_non_ascii(&self) -> bool {
-        *self as u32 > 237
+    fn is_non_ascii_ident(&self) -> bool {
+        matches!(
+            *self,
+            '\u{B7}'
+                | '\u{C0}'..='\u{D6}'
+                | '\u{D8}'..='\u{F6}'
+                | '\u{F8}'..='\u{37D}'
+                | '\u{37F}'..='\u{1FFF}'
+                | '\u{200C}'
+                | '\u{200D}'
+                | '\u{203F}'
+                | '\u{2040}'
+                | '\u{2070}'..='\u{218F}'
+                | '\u{2C00}'..='\u{2FEF}'
+                | '\u{3001}'..='\u{D7FF}'
+                | '\u{F900}'..='\u{FDCF}'
+                | '\u{FDF0}'..='\u{FFFD}'
+                | '\u{10000}'..
+        )
     }
 
     #[inline]
