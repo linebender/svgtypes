@@ -15,6 +15,10 @@ You can find its changes [documented below](#0161-2026-01-09).
 
 This release has an [MSRV][] of 1.85.
 
+### Added
+
+- Support `hwb()` colors. ([#63][] by [@simartin][])
+
 ### Fixed
 
 - Accept all non-ASCII ident code points in CSS identifiers, so unquoted font-family names such as `café` parse. ([#71][] by [@mamicicekel][])
@@ -297,6 +301,7 @@ Many thanks to Yevhenii Reizner for the years of hard work that he has poured in
 [#43]: https://github.com/linebender/svgtypes/pull/43
 [#44]: https://github.com/linebender/svgtypes/pull/44
 [#56]: https://github.com/linebender/svgtypes/pull/56
+[#63]: https://github.com/linebender/svgtypes/pull/63
 [#71]: https://github.com/linebender/svgtypes/pull/71
 
 [@demurgos]: https://github.com/demurgos
@@ -305,6 +310,7 @@ Many thanks to Yevhenii Reizner for the years of hard work that he has poured in
 [@Laurenzv]: https://github.com/LaurenzV
 [@mamicicekel]: https://github.com/mamicicekel
 [@romanzes]: https://github.com/romanzes
+[@simartin]: https://github.com/simartin
 [@tomcur]: https://github.com/tomcur
 [@waywardmonkeys]: https://github.com/waywardmonkeys
 [@yisibl]: https://github.com/yisibl
