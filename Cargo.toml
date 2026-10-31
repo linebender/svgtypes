@@ -23,4 +23,4 @@ libm = ["kurbo/libm"]
 
 [dependencies]
 siphasher = "1.0" # perfect hash implementation for color names
-kurbo = { version = "0.12", default-features = false } # ArcTo to CurveTo(s)
+kurbo = { default-features = false, path = "./../kurbo/kurbo" } # ArcTo to CurveTo(s)

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use crate::{Error, Stream};
-use alloc::vec::Vec;
+use kurbo::{ArcAppendIter, PathEl};
 
 /// Representation of a path segment.
 ///
@@ -726,7 +726,7 @@ pub struct SimplifyingPathParser<'a> {
     prev_seg: PathSegment,
     prev_simple_seg: Option<SimplePathSegment>,
 
-    buffer: Vec<SimplePathSegment>,
+    arc_append_iter: Option<ArcAppendIter>,
 }
 
 impl<'a> From<&'a str> for SimplifyingPathParser<'a> {
@@ -746,7 +746,7 @@ impl<'a> From<&'a str> for SimplifyingPathParser<'a> {
                 y: 0.0,
             },
             prev_simple_seg: None,
-            buffer: Vec::new(),
+            arc_append_iter: None,
         }
     }
 }
@@ -755,32 +755,63 @@ impl Iterator for SimplifyingPathParser<'_> {
     type Item = Result<SimplePathSegment, Error>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if !self.buffer.is_empty() {
-            return Some(Ok(self.buffer.remove(0)));
+        let mut prev = None;
+        if let Some(SimplePathSegment::MoveTo { .. }) = self.prev_simple_seg {
+            self.prev_simple_seg = None;
+            prev = Some(self.prev_seg);
+        }
+        if let Some(arc_append) = &mut self.arc_append_iter {
+            if let Some(PathEl::CurveTo(p1, p2, p)) = arc_append.next() {
+                self.prev_x = p.x;
+                self.prev_y = p.y;
+                return Some(Ok(SimplePathSegment::CurveTo {
+                    x1: p1.x,
+                    y1: p1.y,
+                    x2: p2.x,
+                    y2: p2.y,
+                    x: p.x,
+                    y: p.y,
+                }));
+            } else {
+                self.arc_append_iter = None;
+            }
         }
 
-        let segment = match self.parser.next()? {
-            Ok(v) => v,
-            Err(e) => return Some(Err(e)),
+        let segment = if let Some(s) = prev {
+            s
+        } else {
+            match self.parser.next()? {
+                Ok(v) => v,
+                Err(e) => return Some(Err(e)),
+            }
         };
 
         // If a ClosePath segment is followed by any command other than MoveTo or ClosePath
         // then MoveTo is implicit.
-        if let Some(SimplePathSegment::ClosePath) = self.prev_simple_seg {
-            match segment {
-                PathSegment::MoveTo { .. } | PathSegment::ClosePath { .. } => {}
+        if let PathSegment::ClosePath { .. } = self.prev_seg {
+            match self.parser.prev_cmd {
+                Some(b'M' | b'm') => {
+                    self.prev_simple_seg = None;
+                }
+                Some(b'z' | b'Z') => {
+                    return self.next();
+                }
                 _ => {
                     let new_seg = SimplePathSegment::MoveTo {
                         x: self.prev_mx,
                         y: self.prev_my,
                     };
-                    self.buffer.push(new_seg);
+                    self.prev_mx = self.prev_x;
+                    self.prev_my = self.prev_y;
+
+                    self.prev_seg = segment;
                     self.prev_simple_seg = Some(new_seg);
+                    return Some(Ok(new_seg));
                 }
             }
         }
 
-        match segment {
+        let segment = match segment {
             PathSegment::MoveTo { abs, mut x, mut y } => {
                 if !abs {
                     // When we get 'm'(relative) segment, which is not first segment - then it's
@@ -794,8 +825,8 @@ impl Iterator for SimplifyingPathParser<'_> {
                     }
                 }
 
-                self.buffer.push(SimplePathSegment::MoveTo { x, y });
                 self.prev_seg = segment;
+                Some(SimplePathSegment::MoveTo { x, y })
             }
             PathSegment::LineTo { abs, mut x, mut y } => {
                 if !abs {
@@ -803,26 +834,24 @@ impl Iterator for SimplifyingPathParser<'_> {
                     y += self.prev_y;
                 }
 
-                self.buffer.push(SimplePathSegment::LineTo { x, y });
                 self.prev_seg = segment;
+                Some(SimplePathSegment::LineTo { x, y })
             }
             PathSegment::HorizontalLineTo { abs, mut x } => {
                 if !abs {
                     x += self.prev_x;
                 }
 
-                self.buffer
-                    .push(SimplePathSegment::LineTo { x, y: self.prev_y });
                 self.prev_seg = segment;
+                Some(SimplePathSegment::LineTo { x, y: self.prev_y })
             }
             PathSegment::VerticalLineTo { abs, mut y } => {
                 if !abs {
                     y += self.prev_y;
                 }
 
-                self.buffer
-                    .push(SimplePathSegment::LineTo { x: self.prev_x, y });
                 self.prev_seg = segment;
+                Some(SimplePathSegment::LineTo { x: self.prev_x, y })
             }
             PathSegment::CurveTo {
                 abs,
@@ -842,15 +871,6 @@ impl Iterator for SimplifyingPathParser<'_> {
                     y += self.prev_y;
                 }
 
-                self.buffer.push(SimplePathSegment::CurveTo {
-                    x1,
-                    y1,
-                    x2,
-                    y2,
-                    x,
-                    y,
-                });
-
                 // Remember as absolute.
                 self.prev_seg = PathSegment::CurveTo {
                     abs: true,
@@ -861,6 +881,15 @@ impl Iterator for SimplifyingPathParser<'_> {
                     x,
                     y,
                 };
+
+                Some(SimplePathSegment::CurveTo {
+                    x1,
+                    y1,
+                    x2,
+                    y2,
+                    x,
+                    y,
+                })
             }
             PathSegment::SmoothCurveTo {
                 abs,
@@ -889,15 +918,6 @@ impl Iterator for SimplifyingPathParser<'_> {
                     y += self.prev_y;
                 }
 
-                self.buffer.push(SimplePathSegment::CurveTo {
-                    x1,
-                    y1,
-                    x2,
-                    y2,
-                    x,
-                    y,
-                });
-
                 // Remember as absolute.
                 self.prev_seg = PathSegment::SmoothCurveTo {
                     abs: true,
@@ -906,6 +926,15 @@ impl Iterator for SimplifyingPathParser<'_> {
                     x,
                     y,
                 };
+
+                Some(SimplePathSegment::CurveTo {
+                    x1,
+                    y1,
+                    x2,
+                    y2,
+                    x,
+                    y,
+                })
             }
             PathSegment::Quadratic {
                 abs,
@@ -921,9 +950,6 @@ impl Iterator for SimplifyingPathParser<'_> {
                     y += self.prev_y;
                 }
 
-                self.buffer
-                    .push(SimplePathSegment::Quadratic { x1, y1, x, y });
-
                 // Remember as absolute.
                 self.prev_seg = PathSegment::Quadratic {
                     abs: true,
@@ -932,6 +958,7 @@ impl Iterator for SimplifyingPathParser<'_> {
                     x,
                     y,
                 };
+                Some(SimplePathSegment::Quadratic { x1, y1, x, y })
             }
             PathSegment::SmoothQuadratic { abs, mut x, mut y } => {
                 // 'The control point is assumed to be the reflection of
@@ -955,11 +982,9 @@ impl Iterator for SimplifyingPathParser<'_> {
                     y += self.prev_y;
                 }
 
-                self.buffer
-                    .push(SimplePathSegment::Quadratic { x1, y1, x, y });
-
                 // Remember as absolute.
                 self.prev_seg = PathSegment::SmoothQuadratic { abs: true, x, y };
+                Some(SimplePathSegment::Quadratic { x1, y1, x, y })
             }
             PathSegment::EllipticalArc {
                 abs,
@@ -985,43 +1010,30 @@ impl Iterator for SimplifyingPathParser<'_> {
                     sweep,
                 };
 
+                self.prev_seg = segment;
                 match kurbo::Arc::from_svg_arc(&svg_arc) {
                     Some(arc) => {
-                        arc.to_cubic_beziers(0.1, |p1, p2, p| {
-                            self.buffer.push(SimplePathSegment::CurveTo {
-                                x1: p1.x,
-                                y1: p1.y,
-                                x2: p2.x,
-                                y2: p2.y,
-                                x: p.x,
-                                y: p.y,
-                            });
-                        });
+                        self.arc_append_iter = Some(arc.append_iter(0.1));
+                        return self.next();
                     }
-                    None => {
-                        self.buffer.push(SimplePathSegment::LineTo { x, y });
-                    }
+                    None => Some(SimplePathSegment::LineTo { x, y }),
                 }
-
-                self.prev_seg = segment;
             }
             PathSegment::ClosePath { .. } => {
+                self.prev_seg = segment;
                 if let Some(SimplePathSegment::ClosePath) = self.prev_simple_seg {
                     // Do not add sequential ClosePath segments.
                     // Otherwise it will break markers rendering.
+                    None
                 } else {
-                    self.buffer.push(SimplePathSegment::ClosePath);
+                    Some(SimplePathSegment::ClosePath)
                 }
-
-                self.prev_seg = segment;
             }
-        }
+        };
 
         // Remember last position.
-        if let Some(new_segment) = self.buffer.last() {
-            self.prev_simple_seg = Some(*new_segment);
-
-            match *new_segment {
+        if let Some(new_segment) = segment {
+            match new_segment {
                 SimplePathSegment::MoveTo { x, y } => {
                     self.prev_x = x;
                     self.prev_y = y;
@@ -1041,18 +1053,15 @@ impl Iterator for SimplifyingPathParser<'_> {
                     self.prev_y = y;
                 }
                 SimplePathSegment::ClosePath => {
+                    self.prev_simple_seg = Some(new_segment);
                     // ClosePath moves us to the last MoveTo coordinate.
                     self.prev_x = self.prev_mx;
                     self.prev_y = self.prev_my;
                 }
             }
+            return Some(Ok(new_segment));
         }
-
-        if self.buffer.is_empty() {
-            return self.next();
-        }
-
-        Some(Ok(self.buffer.remove(0)))
+        self.next()
     }
 }
 
@@ -1067,7 +1076,8 @@ mod simple_tests {
             fn $name() {
                 let mut s = SimplifyingPathParser::from($text);
                 $(
-                    assert_eq!(s.next().unwrap().unwrap(), $seg);
+                    let seg = s.next(); // useful for debug
+                    assert_eq!(seg.as_ref().unwrap().as_ref().unwrap(), &$seg);
                 )*
 
                 if let Some(res) = s.next() {
