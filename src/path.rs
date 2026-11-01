@@ -983,7 +983,10 @@ impl Iterator for SimplifyingPathParser<'_> {
 
                 match kurbo::Arc::from_svg_arc(&svg_arc) {
                     Some(arc) => {
-                        arc.to_cubic_beziers(0.1, |p1, p2, p| {
+                        // The count of cubics grows with the radius, so past a certain
+                        // radius the tolerance has to grow with it.
+                        let tolerance = (arc.radii.x.max(arc.radii.y) * 1e-6).max(0.1);
+                        arc.to_cubic_beziers(tolerance, |p1, p2, p| {
                             self.buffer.push(SimplePathSegment::CurveTo {
                                 x1: p1.x,
                                 y1: p1.y,
@@ -1183,6 +1186,16 @@ mod simple_tests {
         SimplePathSegment::MoveTo { x: 10.0, y: 20.0 },
         SimplePathSegment::LineTo { x: 50.0, y: 60.0 }
     );
+
+    #[test]
+    fn arc_to_with_huge_radius() {
+        let count = |data| SimplifyingPathParser::from(data).count();
+
+        assert_eq!(count("M 0 0 A 1e4 1e4 0 0 1 1e4 1e4"), 3);
+        assert_eq!(count("M 0 0 A 1e7 1e7 0 0 1 1e7 1e7"), 4);
+        assert_eq!(count("M 0 0 A 1e30 1e30 0 0 1 1e30 1e30"), 4);
+        assert_eq!(count("M 21 15 a 2 2 0 0 1 2e50 2"), 7);
+    }
 
     #[test]
     fn arc_to() {
