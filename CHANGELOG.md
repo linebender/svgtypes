@@ -22,6 +22,7 @@ This release has an [MSRV][] of 1.85.
 ### Fixed
 
 - Accept all non-ASCII ident code points in CSS identifiers, so unquoted font-family names such as `café` parse. ([#71][] by [@mamicicekel][])
+- Limit the number of curves an elliptical arc with a huge radius is converted to.
 
 ## [0.16.1][] (2026-01-09)
 
