@@ -14,6 +14,10 @@
 
 </div>
 
+> [!IMPORTANT]
+> SVG Types has moved to the [resvg repository](https://github.com/linebender/resvg/tree/main/crates/svgtypes).
+> This repository is no longer maintained, please open issues and pull requests there instead.
+
 ## Supported SVG types
 
 - [`<color>`](https://www.w3.org/TR/css-color-3/)
